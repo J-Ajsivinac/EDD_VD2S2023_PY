@@ -8,6 +8,8 @@ import (
 )
 
 var listaE pkg.ListaDobleE
+var ColaPrioridad *pkg.Cola = &pkg.Cola{Inicio: nil, Longitud: 0}
+var listaTutores pkg.ListaCircularDoble = pkg.ListaCircularDoble{Inicio: nil, Fin: nil, Longitud: 0}
 
 func menu() {
 	fmt.Println("")
@@ -54,6 +56,28 @@ func menuUsuario() {
 	fmt.Println(" ╚════════════════════════════════════════╝")
 	fmt.Println("")
 	fmt.Print("Ingrese una opcion: ")
+}
+
+func MenuAceptar() {
+	opcion := 0
+	salir := false
+
+	for !salir {
+		ColaPrioridad.Primero()
+		fmt.Println("1. Aceptar")
+		fmt.Println("2. Rechazar")
+		fmt.Scanln(&opcion)
+		if opcion == 1 {
+			fmt.Println("Se agrego a la lista al estudiante ", ColaPrioridad.Inicio.Tutor.Carnet)
+			listaTutores.InsertarOrdenado(ColaPrioridad.Inicio.Tutor.Carnet, ColaPrioridad.Inicio.Tutor.Nombre, ColaPrioridad.Inicio.Tutor.Curso, ColaPrioridad.Inicio.Tutor.Nota)
+			ColaPrioridad.Descolar()
+		} else if opcion == 2 {
+			ColaPrioridad.Descolar()
+		} else {
+			salir = true
+		}
+	}
+
 }
 
 func login(usuario string, contra string) {
@@ -110,6 +134,8 @@ func opcionesAdmin(opcion int) {
 	switch opcion {
 	case 1:
 		fmt.Println("Carga de Estudiantes Tutores")
+		ColaPrioridad.LeerArchivoTutores("inputT.csv")
+		ColaPrioridad.Primero()
 	case 2:
 		fmt.Println("Carga de Estudiantes")
 		listaE.LeerArchivo("inputE.csv")
@@ -117,9 +143,12 @@ func opcionesAdmin(opcion int) {
 	case 3:
 		fmt.Println("Carga Cursos al sistema")
 	case 4:
-		fmt.Println("Carga Cursos al sistema")
+		fmt.Println("Control de Estudiantes tutores")
+		MenuAceptar()
 	case 5:
-		fmt.Println("Carga Cursos al sistema")
+		fmt.Println("Reportes Estructuras")
+		listaE.Reporte()
+		listaTutores.Reporte()
 	default:
 		fmt.Println("Opcion no valida")
 	}
@@ -137,18 +166,10 @@ func opcionesUsuario(opcion int) {
 }
 
 func main() {
-	// listaE := pkg.ListaEstu{Primero: nil, Ultimo: nil, Longitud: 0}
-	// listaE.Insertar(&pkg.Estudiante{Carnet: 201801021, Nombre: "Juan"})
-	// listaE.Insertar(&pkg.Estudiante{Carnet: 201801022, Nombre: "Juan1"})
-	// listaE.Insertar(&pkg.Estudiante{Carnet: 201801023, Nombre: "Juan2"})
-	// listaE.Recorrer()
-	// fmt.Println("***************")
-	// listaE.Recorrer2()
 	for {
 		menu()
 		var opcion int
 		fmt.Scanln(&opcion)
-		fmt.Println(&opcion)
 		opcionesLogin(opcion)
 	}
 }
