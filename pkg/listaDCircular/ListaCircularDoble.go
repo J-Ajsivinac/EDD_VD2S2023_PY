@@ -8,54 +8,102 @@ import (
 
 type ListaCircularDoble struct {
 	Inicio   *NodoCircularE
-	Fin      *NodoCircularE
 	Longitud int
 }
 
 func (l *ListaCircularDoble) InsertarOrdenado(carnet int, nombre string, curso string, nota int) {
 	nuevoAlumno := &EstudianteTutor{Carnet: carnet, Nombre: nombre, Curso: curso, Nota: nota}
 	nuevoNodo := &NodoCircularE{Estudiante: nuevoAlumno}
-	if l.Inicio == nil {
-		l.Inicio = nuevoNodo
-		l.Fin = nuevoNodo
-		l.Inicio.Siguiente = l.Inicio
-		l.Inicio.Anterior = l.Inicio
-	} else {
-		if nuevoNodo.Estudiante.Carnet < l.Inicio.Estudiante.Carnet {
-			nuevoNodo.Siguiente = l.Inicio
-			nuevoNodo.Anterior = l.Fin
-			l.Inicio.Anterior = nuevoNodo
-			l.Inicio = nuevoNodo
-			l.Fin.Siguiente = l.Inicio
-		} else if nuevoNodo.Estudiante.Carnet > l.Fin.Estudiante.Carnet {
-			nuevoNodo.Siguiente = l.Inicio
-			nuevoNodo.Anterior = l.Fin
-			l.Fin.Siguiente = nuevoNodo
-			l.Fin = nuevoNodo
-			l.Inicio.Anterior = l.Fin
-		} else {
-			aux := l.Inicio
-			for aux.Siguiente != l.Inicio {
-				if nuevoNodo.Estudiante.Carnet < aux.Siguiente.Estudiante.Carnet {
-					break
-				}
-				aux = aux.Siguiente
-			}
-			nuevoNodo.Siguiente = aux.Siguiente
-			nuevoNodo.Anterior = aux
-			aux.Siguiente.Anterior = nuevoNodo
-			aux.Siguiente = nuevoNodo
-		}
+
+	var existe, esMayor = l.Validar(nuevoAlumno)
+	if existe && !esMayor {
+		fmt.Println("El curso ya tiene un tutor con una nota mayor o igual a la que se desea ingresar")
+		return
+	} else if existe {
+		fmt.Println("Se sustituyo el tutor del curso, ", curso)
 	}
+
+	if l.Longitud == 0 {
+		nuevoNodo.Siguiente = nuevoNodo
+		nuevoNodo.Anterior = nuevoNodo
+		l.Inicio = nuevoNodo
+		l.Longitud++
+		fmt.Print("Se inserto (inicio): ", carnet)
+		return
+	}
+
+	if carnet < l.Inicio.Estudiante.Carnet {
+		nuevoNodo.Siguiente = l.Inicio
+		nuevoNodo.Anterior = l.Inicio.Anterior
+		l.Inicio.Anterior.Siguiente = nuevoNodo
+		l.Inicio.Anterior = nuevoNodo
+		l.Inicio = nuevoNodo
+		l.Longitud++
+		fmt.Print("Se inserto (principio XD): ", carnet)
+		return
+	}
+
+	actual := l.Inicio
+	for actual.Siguiente != l.Inicio && nuevoAlumno.Carnet > actual.Siguiente.Estudiante.Carnet {
+		actual = actual.Siguiente
+	}
+	nuevoNodo.Siguiente = actual.Siguiente
+	nuevoNodo.Anterior = actual
+	actual.Siguiente.Anterior = nuevoNodo
+	actual.Siguiente = nuevoNodo
 	l.Longitud++
+	fmt.Print("Se inserto (medio y final): ", carnet)
 }
 
-func (l *ListaCircularDoble) Recorrer() {
-	aux := l.Inicio
-	for aux.Siguiente != l.Inicio {
-		fmt.Println(aux.Estudiante.Carnet, "->", aux.Estudiante.Nombre, "->")
-		aux = aux.Siguiente
+func (lista *ListaCircularDoble) Recorrer() {
+	if lista.Inicio == nil {
+		fmt.Println("La lista está vacía.")
+		return
 	}
+
+	actual := lista.Inicio
+	for {
+		fmt.Printf("Carnet: %d, Nombre: %s\n",
+			actual.Estudiante.Carnet, actual.Estudiante.Nombre)
+		actual = actual.Siguiente
+		if actual == lista.Inicio {
+			break
+		}
+	}
+}
+
+// existencia, nota
+func (l *ListaCircularDoble) Validar(estudiante *EstudianteTutor) (bool, bool) {
+	if l.Inicio == nil {
+		return false, false
+	}
+
+	existe := false
+	aux := l.Inicio
+
+	for {
+		if aux.Estudiante.Curso == estudiante.Curso {
+			existe = true
+			if estudiante.Nota >= aux.Estudiante.Nota {
+				aux.Anterior.Siguiente = aux.Siguiente
+				aux.Siguiente.Anterior = aux.Anterior
+
+				// Si el nodo eliminado es el inicio, actualizamos el puntero de inicio
+				if l.Inicio == aux {
+					l.Inicio = aux.Siguiente
+				}
+				l.Longitud--
+				return existe, true
+
+			}
+		}
+		aux = aux.Siguiente
+		if aux == l.Inicio {
+			break
+		}
+	}
+
+	return existe, false
 }
 
 func (l *ListaCircularDoble) Reporte() {

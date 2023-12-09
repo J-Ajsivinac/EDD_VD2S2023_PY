@@ -6,28 +6,12 @@ import (
 	"io"
 	"os"
 	"strconv"
+	"strings"
 )
 
 type Cola struct {
 	Inicio   *NodoCola
 	Longitud int
-}
-
-func (c *Cola) Encolar(carnet int, nombre string, curso string, nota int) {
-	nuevoTutor := &EstudianteTutor{Carnet: carnet, Nombre: nombre, Curso: curso, Nota: nota}
-	nuevoNodo := &NodoCola{Tutor: nuevoTutor, Siguiente: nil, Prioridad: 0}
-
-	if c.Longitud == 0 {
-		c.Inicio = nuevoNodo
-		c.Longitud++
-	} else {
-		aux := c.Inicio
-		for aux.Siguiente != nil {
-			aux = aux.Siguiente
-		}
-		aux.Siguiente = nuevoNodo
-		c.Longitud++
-	}
 }
 
 func (c *Cola) EncolarPrioridad(carnet int, nombre string, curso string, nota int) {
@@ -106,7 +90,7 @@ func (c *Cola) LeerArchivoTutores(ruta string) {
 		}
 		valor, _ := strconv.Atoi(linea[0])
 		nota, _ := strconv.Atoi(linea[3])
-		c.EncolarPrioridad(valor, linea[1], linea[2], nota)
+		c.EncolarPrioridad(valor, strings.TrimSpace(linea[1]), strings.TrimSpace(linea[2]), nota)
 	}
 }
 
@@ -120,15 +104,15 @@ func (c *Cola) Primero() {
 	fmt.Println(" ║                      Tutor                     ║")
 	fmt.Println(" ╠════════════════════════════════════════════════╣")
 	fmt.Println(" ║                                                ║")
-	fmt.Printf(" ║ %-49s ║\n", "Actual: "+strconv.Itoa(c.Inicio.Tutor.Carnet))
-	fmt.Printf(" ║ %-49s ║\n", "Nombre: "+c.Inicio.Tutor.Nombre)
-	fmt.Printf(" ║ %-49s ║\n", "Curso: "+c.Inicio.Tutor.Curso)
-	fmt.Printf(" ║ %-49s ║\n", "Nota: "+strconv.Itoa(c.Inicio.Tutor.Nota))
-	fmt.Printf(" ║ %-49s ║\n", "Prioridad: "+strconv.Itoa(c.Inicio.Prioridad))
+	fmt.Printf(" ║ %-46s ║\n", "Actual: "+strconv.Itoa(c.Inicio.Tutor.Carnet))
+	fmt.Printf(" ║ %-46s ║\n", "Nombre: "+c.Inicio.Tutor.Nombre)
+	fmt.Printf(" ║ %-46s ║\n", "Curso: "+c.Inicio.Tutor.Curso)
+	fmt.Printf(" ║ %-46s ║\n", "Nota: "+strconv.Itoa(c.Inicio.Tutor.Nota))
+	fmt.Printf(" ║ %-46s ║\n", "Prioridad: "+strconv.Itoa(c.Inicio.Prioridad))
 	if c.Inicio.Siguiente != nil {
-		fmt.Printf(" ║ %-49s ║\n", "Siguiente: "+strconv.Itoa(c.Inicio.Siguiente.Tutor.Carnet))
+		fmt.Printf(" ║ %-46s ║\n", "Siguiente: "+strconv.Itoa(c.Inicio.Siguiente.Tutor.Carnet))
 	} else {
-		fmt.Printf(" ║ %-49s ║\n", "Siguiente: No hay mas tutores por evaluar")
+		fmt.Printf(" ║ %-46s ║\n", "Siguiente: No hay mas tutores por evaluar")
 	}
 	fmt.Println(" ║                                                ║")
 	fmt.Println(" ╚════════════════════════════════════════════════╝")
