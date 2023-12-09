@@ -1,6 +1,7 @@
-package pkg
+package listaDCircular
 
 import (
+	"Proyecto/pkg"
 	"fmt"
 	"strconv"
 )
@@ -82,7 +83,7 @@ func (l *ListaCircularDoble) Reporte() {
 	texto += "nodo" + strconv.Itoa(contador) + "->nodo0 \n"
 	texto += "nodo0 -> " + "nodo" + strconv.Itoa(contador) + "\n"
 	texto += "}"
-	crearArchivo(nombreArchivo)
-	escribirArchivo(texto, nombreArchivo)
-	ejecutar(nombreImagen, nombreArchivo)
+	pkg.CrearArchivo(nombreArchivo)
+	pkg.EscribirArchivo(texto, nombreArchivo)
+	pkg.Ejecutar(nombreImagen, nombreArchivo)
 }

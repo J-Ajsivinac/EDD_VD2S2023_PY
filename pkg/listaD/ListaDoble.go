@@ -1,7 +1,11 @@
-package pkg
+package listaD
 
 import (
+	"Proyecto/pkg"
+	"encoding/csv"
 	"fmt"
+	"io"
+	"os"
 	"strconv"
 )
 
@@ -53,15 +57,44 @@ func (l *ListaDobleE) Recorrer2() {
 	}
 }
 
-func (l *ListaDobleE) LoginUser(contra int) bool {
+func (l *ListaDobleE) LoginUser(contra int, carnet int) bool {
 	aux := l.Primero
 	for aux != nil {
-		if aux.Estudiante.Carnet == contra {
+		if aux.Estudiante.Carnet == contra && carnet == contra {
 			return true
 		}
 		aux = aux.Siguiente
 	}
 	return false
+}
+
+func (l *ListaDobleE) LeerArchivo(ruta string) {
+	file, err := os.Open(ruta)
+	if err != nil {
+		fmt.Println("No pude abrir el archivo")
+		return
+	}
+	defer file.Close()
+
+	lectura := csv.NewReader(file)
+	lectura.Comma = ','
+	encabezado := true
+	for {
+		linea, err := lectura.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			fmt.Println("No pude leer la linea del csv")
+			continue
+		}
+		if encabezado {
+			encabezado = false
+			continue
+		}
+		valor, _ := strconv.Atoi(linea[0])
+		l.Insertar(&Estudiante{Carnet: valor, Nombre: linea[1]})
+	}
 }
 
 func (l *ListaDobleE) Reporte() {
@@ -91,7 +124,7 @@ func (l *ListaDobleE) Reporte() {
 	}
 	texto += "nodo" + strconv.Itoa(contador) + "->nodonull2;\n"
 	texto += "}"
-	crearArchivo(nombreArchivo)
-	escribirArchivo(texto, nombreArchivo)
-	ejecutar(nombreImagen, nombreArchivo)
+	pkg.CrearArchivo(nombreArchivo)
+	pkg.EscribirArchivo(texto, nombreArchivo)
+	pkg.Ejecutar(nombreImagen, nombreArchivo)
 }

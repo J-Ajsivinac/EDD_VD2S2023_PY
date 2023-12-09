@@ -1,4 +1,4 @@
-package pkg
+package listaD
 
 type Estudiante struct {
 	Carnet int

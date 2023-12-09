@@ -1,4 +1,4 @@
-package pkg
+package listaDCircular
 
 type EstudianteTutor struct {
 	Carnet int
@@ -11,10 +11,4 @@ type NodoCircularE struct {
 	Estudiante *EstudianteTutor
 	Siguiente  *NodoCircularE
 	Anterior   *NodoCircularE
-}
-
-type NodoCola struct {
-	Tutor     *EstudianteTutor
-	Prioridad int
-	Siguiente *NodoCola
 }
