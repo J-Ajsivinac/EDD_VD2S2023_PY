@@ -1,15 +1,17 @@
 package main
 
 import (
-	"Proyecto/pkg"
+	"Proyecto/pkg/cola"
+	"Proyecto/pkg/listaD"
+	"Proyecto/pkg/listaDCircular"
 	"fmt"
 	"os"
 	"strconv"
 )
 
-var listaE pkg.ListaDobleE
-var ColaPrioridad *pkg.Cola = &pkg.Cola{Inicio: nil, Longitud: 0}
-var listaTutores pkg.ListaCircularDoble = pkg.ListaCircularDoble{Inicio: nil, Fin: nil, Longitud: 0}
+var listaE listaD.ListaDobleE
+var ColaPrioridad *cola.Cola = &cola.Cola{Inicio: nil, Longitud: 0}
+var listaTutores *listaDCircular.ListaCircularDoble = &listaDCircular.ListaCircularDoble{Inicio: nil, Fin: nil, Longitud: 0}
 
 func menu() {
 	fmt.Println("")
@@ -93,8 +95,9 @@ func login(usuario string, contra string) {
 			opcionesAdmin(opcionL)
 		}
 	} else {
+		user, _ := strconv.Atoi(usuario)
 		valor, _ := strconv.Atoi(contra)
-		if listaE.LoginUser(valor) {
+		if listaE.LoginUser(user, valor) {
 			fmt.Println("Login exitoso")
 			for {
 				menuUsuario()
