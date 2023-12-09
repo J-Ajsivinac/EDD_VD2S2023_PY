@@ -9,9 +9,9 @@ import (
 	"strconv"
 )
 
-var listaE listaD.ListaDobleE
+var listaE *listaD.ListaDobleE = &listaD.ListaDobleE{Primero: nil, Ultimo: nil, Longitud: 0}
 var ColaPrioridad *cola.Cola = &cola.Cola{Inicio: nil, Longitud: 0}
-var listaTutores *listaDCircular.ListaCircularDoble = &listaDCircular.ListaCircularDoble{Inicio: nil, Fin: nil, Longitud: 0}
+var listaTutores *listaDCircular.ListaCircularDoble = &listaDCircular.ListaCircularDoble{Inicio: nil, Longitud: 0}
 
 func menu() {
 	fmt.Println("")
@@ -65,12 +65,12 @@ func MenuAceptar() {
 	salir := false
 
 	for !salir {
+		if ColaPrioridad.Longitud == 0 {
+			break
+		}
 		ColaPrioridad.Primero()
-		fmt.Println("1. Aceptar")
-		fmt.Println("2. Rechazar")
 		fmt.Scanln(&opcion)
 		if opcion == 1 {
-			fmt.Println("Se agrego a la lista al estudiante ", ColaPrioridad.Inicio.Tutor.Carnet)
 			listaTutores.InsertarOrdenado(ColaPrioridad.Inicio.Tutor.Carnet, ColaPrioridad.Inicio.Tutor.Nombre, ColaPrioridad.Inicio.Tutor.Curso, ColaPrioridad.Inicio.Tutor.Nota)
 			ColaPrioridad.Descolar()
 		} else if opcion == 2 {
@@ -137,12 +137,16 @@ func opcionesAdmin(opcion int) {
 	switch opcion {
 	case 1:
 		fmt.Println("Carga de Estudiantes Tutores")
-		ColaPrioridad.LeerArchivoTutores("inputT.csv")
-		ColaPrioridad.Primero()
+		ruta := ""
+		fmt.Print("Ingrese la ruta del archivo: ")
+		fmt.Scanln(&ruta)
+		ColaPrioridad.LeerArchivoTutores(ruta)
 	case 2:
 		fmt.Println("Carga de Estudiantes")
-		listaE.LeerArchivo("inputE.csv")
-		listaE.Recorrer()
+		ruta := ""
+		fmt.Print("Ingrese la ruta del archivo: ")
+		fmt.Scanln(&ruta)
+		listaE.LeerArchivo(ruta)
 	case 3:
 		fmt.Println("Carga Cursos al sistema")
 	case 4:
@@ -150,6 +154,7 @@ func opcionesAdmin(opcion int) {
 		MenuAceptar()
 	case 5:
 		fmt.Println("Reportes Estructuras")
+		fmt.Println(listaTutores.Longitud)
 		listaE.Reporte()
 		listaTutores.Reporte()
 	default:
@@ -161,6 +166,7 @@ func opcionesUsuario(opcion int) {
 	switch opcion {
 	case 1:
 		fmt.Println("Ver tutores Disponibles")
+		listaTutores.Recorrer()
 	case 2:
 		fmt.Println("Asignarse a Tutores")
 	default:
