@@ -38,7 +38,8 @@ func EscribirArchivo(contenido string, nombre_archivo string) {
 
 func Ejecutar(nombre_imagen string, archivo string) {
 	path, _ := exec.LookPath("dot")
-	cmd, _ := exec.Command(path, "-Tjpg", archivo).Output()
+	dpi := "900"
+	cmd, _ := exec.Command(path, "-Gscale=4 -Gantialias=true", "-Gdpi"+dpi, "-Tjpg", archivo).Output()
 	mode := 0777
 	_ = os.WriteFile(nombre_imagen, cmd, os.FileMode(mode))
 	//dot lista.dot -Tjpg lista.jpg -o

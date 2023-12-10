@@ -102,18 +102,18 @@ func (l *ListaDobleE) Reporte() {
 		fmt.Println("No hay mas Alumnos para graficar")
 		return
 	}
-	nombreArchivo := "./listadoble.dot"
-	nombreImagen := "./listadoble.jpg"
+	nombreArchivo := "./reportes/listadoble.dot"
+	nombreImagen := "./reportes/listadoble.jpg"
 	texto := "digraph lista{\n"
 	texto += "rankdir=LR;\n"
-	texto += "node[shape = record];\n"
+	texto += "node[shape = record fontname=Verdana];\n"
 	texto += "nodonull1[label=\"null\"];\n"
 	texto += "nodonull2[label=\"null\"];\n"
 	aux := l.Primero
 	contador := 0
 	texto += "nodonull1->nodo0 [dir=back];\n"
 	for i := 0; i < l.Longitud; i++ {
-		texto += "nodo" + strconv.Itoa(i) + "[label=\"" + strconv.Itoa(aux.Estudiante.Carnet) + "\"];\n"
+		texto += "nodo" + strconv.Itoa(i) + "[label=\"" + "Nombre: " + aux.Estudiante.Nombre + "\\n Carnet: " + strconv.Itoa(aux.Estudiante.Carnet) + "\"];\n"
 		aux = aux.Siguiente
 	}
 	for i := 0; i < l.Longitud-1; i++ {

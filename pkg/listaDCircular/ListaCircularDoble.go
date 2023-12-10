@@ -111,15 +111,15 @@ func (l *ListaCircularDoble) Reporte() {
 		fmt.Println("No hay mas Tutores para graficar")
 		return
 	}
-	nombreArchivo := "./listadoblecircular.dot"
-	nombreImagen := "./listadoblecircular.jpg"
+	nombreArchivo := "./reportes/listadoblecircular.dot"
+	nombreImagen := "./reportes/listadoblecircular.jpg"
 	texto := "digraph lista{\n"
 	texto += "rankdir=LR;\n"
-	texto += "node[shape = record];\n"
+	texto += "node[shape = record fontname=Verdana];\n"
 	aux := l.Inicio
 	contador := 0
 	for i := 0; i < l.Longitud; i++ {
-		texto += "nodo" + strconv.Itoa(i) + "[label=\"" + strconv.Itoa(aux.Estudiante.Carnet) + "\"];\n"
+		texto += "nodo" + strconv.Itoa(i) + "[label=\"" + "Nombre: " + aux.Estudiante.Nombre + " \\n Carnet: " + strconv.Itoa(aux.Estudiante.Carnet) + "\"];\n"
 		aux = aux.Siguiente
 	}
 	for i := 0; i < l.Longitud-1; i++ {
@@ -130,7 +130,7 @@ func (l *ListaCircularDoble) Reporte() {
 	}
 	texto += "nodo" + strconv.Itoa(contador) + "->nodo0 \n"
 	texto += "nodo0 -> " + "nodo" + strconv.Itoa(contador) + "\n"
-	texto += "}"
+	texto += "} "
 	pkg.CrearArchivo(nombreArchivo)
 	pkg.EscribirArchivo(texto, nombreArchivo)
 	pkg.Ejecutar(nombreImagen, nombreArchivo)
