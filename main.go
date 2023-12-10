@@ -4,6 +4,7 @@ import (
 	"Proyecto/pkg/cola"
 	"Proyecto/pkg/listaD"
 	"Proyecto/pkg/listaDCircular"
+	"Proyecto/pkg/utilities"
 	"fmt"
 	"os"
 	"strconv"
@@ -12,6 +13,14 @@ import (
 var listaE *listaD.ListaDobleE = &listaD.ListaDobleE{Primero: nil, Ultimo: nil, Longitud: 0}
 var ColaPrioridad *cola.Cola = &cola.Cola{Inicio: nil, Longitud: 0}
 var listaTutores *listaDCircular.ListaCircularDoble = &listaDCircular.ListaCircularDoble{Inicio: nil, Longitud: 0}
+
+func titulos(titulo string) {
+	fmt.Println("")
+	fmt.Println(" ╔════════════════════════════════════════╗")
+	fmt.Printf(" ║ 🔹 %-35s ║\n", titulo)
+	fmt.Println(" ╚════════════════════════════════════════╝")
+	fmt.Println("")
+}
 
 func menu() {
 	fmt.Println("")
@@ -89,7 +98,7 @@ func login(usuario string, contra string) {
 			var opcionL int
 			fmt.Scanln(&opcionL)
 			if opcionL == 6 {
-				fmt.Println("Saliendo del administrador")
+				fmt.Println("\n Saliendo del administrador \n")
 				break
 			}
 			opcionesAdmin(opcionL)
@@ -104,73 +113,76 @@ func login(usuario string, contra string) {
 				var opcionL int
 				fmt.Scanln(&opcionL)
 				if opcionL == 3 {
-					fmt.Println("Saliendo del administrador")
+					fmt.Println("Saliendo del Usuario")
 					break
 				}
 				opcionesUsuario(opcionL)
 			}
+		} else {
+			utilities.MensajeConsola("Credenciales Incorrectas ", "rojo")
 		}
-		fmt.Println("Usuario o contraseña incorrecta")
 	}
 }
 
 func opcionesLogin(opcion int) {
 	switch opcion {
 	case 1:
-		fmt.Println("Login")
-		fmt.Print("Usuario:")
+		titulos("Login")
+		fmt.Print(" 🙍‍♂️ Usuario: ")
 		var usuario string
 		fmt.Scanln(&usuario)
-		fmt.Print("Password:")
+		fmt.Print(" 🔒 Password: ")
 		var contra string
 		fmt.Scanln(&contra)
 		login(usuario, contra)
 	case 2:
-		fmt.Println("Salir")
+		fmt.Println("\n Saliendo del sistema \n")
 		os.Exit(0)
 	default:
-		fmt.Println("Opcion no valida")
+		utilities.MensajeConsola("Opcion no valida", "rojo")
 	}
 }
 
 func opcionesAdmin(opcion int) {
 	switch opcion {
 	case 1:
-		fmt.Println("Carga de Estudiantes Tutores")
+		titulos("Carga de Estudiantes Tutores")
 		ruta := ""
 		fmt.Print("Ingrese la ruta del archivo: ")
 		fmt.Scanln(&ruta)
 		ColaPrioridad.LeerArchivoTutores(ruta)
+		utilities.MensajeConsola("Carga de Estudiantes Tutores exitosa", "verde")
 	case 2:
-		fmt.Println("Carga de Estudiantes")
+		titulos("Carga de Estudiantes")
 		ruta := ""
 		fmt.Print("Ingrese la ruta del archivo: ")
 		fmt.Scanln(&ruta)
 		listaE.LeerArchivo(ruta)
+		utilities.MensajeConsola("Carga de Estudiantes exitosa", "verde")
 	case 3:
-		fmt.Println("Carga Cursos al sistema")
+		titulos("Carga Cursos al sistema")
 	case 4:
-		fmt.Println("Control de Estudiantes tutores")
+		titulos("Control de Estudiantes tutores")
 		MenuAceptar()
 	case 5:
-		fmt.Println("Reportes Estructuras")
+		titulos("Reportes Estructuras")
 		fmt.Println(listaTutores.Longitud)
 		listaE.Reporte()
 		listaTutores.Reporte()
 	default:
-		fmt.Println("Opcion no valida")
+		utilities.MensajeConsola("Opcion no valida", "rojo")
 	}
 }
 
 func opcionesUsuario(opcion int) {
 	switch opcion {
 	case 1:
-		fmt.Println("Ver tutores Disponibles")
+		titulos("Ver Tutores Disponibles")
 		listaTutores.Recorrer()
 	case 2:
-		fmt.Println("Asignarse a Tutores")
+		titulos("Asignarse a Tutores")
 	default:
-		fmt.Println("Opcion no valida")
+		utilities.MensajeConsola("Opcion no valida", "rojo")
 	}
 }
 
