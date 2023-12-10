@@ -2,6 +2,7 @@ package listaDCircular
 
 import (
 	"Proyecto/pkg"
+	"Proyecto/pkg/utilities"
 	"fmt"
 	"strconv"
 )
@@ -17,10 +18,8 @@ func (l *ListaCircularDoble) InsertarOrdenado(carnet int, nombre string, curso s
 
 	var existe, esMayor = l.Validar(nuevoAlumno)
 	if existe && !esMayor {
-		fmt.Println("El curso ya tiene un tutor con una nota mayor o igual a la que se desea ingresar")
+		utilities.MensajeConsola("El curso ya tiene un tutor con una nota mayor o igual a la que se desea ingresar", "amarillo")
 		return
-	} else if existe {
-		fmt.Println("Se sustituyo el tutor del curso, ", curso)
 	}
 
 	if l.Longitud == 0 {
@@ -28,7 +27,11 @@ func (l *ListaCircularDoble) InsertarOrdenado(carnet int, nombre string, curso s
 		nuevoNodo.Anterior = nuevoNodo
 		l.Inicio = nuevoNodo
 		l.Longitud++
-		fmt.Print("Se inserto (inicio): ", carnet)
+		if existe && esMayor {
+			utilities.MensajeConsola("Se sustituyo el tutor del curso, "+curso, "amarillo")
+		} else {
+			utilities.MensajeConsola("Se agrego un nuevo tutor al curso, "+curso, "verde")
+		}
 		return
 	}
 
@@ -39,7 +42,11 @@ func (l *ListaCircularDoble) InsertarOrdenado(carnet int, nombre string, curso s
 		l.Inicio.Anterior = nuevoNodo
 		l.Inicio = nuevoNodo
 		l.Longitud++
-		fmt.Print("Se inserto (principio XD): ", carnet)
+		if existe && esMayor {
+			utilities.MensajeConsola("Se sustituyo el tutor del curso, "+curso, "amarillo")
+		} else {
+			utilities.MensajeConsola("Se agrego un nuevo tutor al curso, "+curso, "verde")
+		}
 		return
 	}
 
@@ -52,24 +59,31 @@ func (l *ListaCircularDoble) InsertarOrdenado(carnet int, nombre string, curso s
 	actual.Siguiente.Anterior = nuevoNodo
 	actual.Siguiente = nuevoNodo
 	l.Longitud++
-	fmt.Print("Se inserto (medio y final): ", carnet)
+	if existe && esMayor {
+		utilities.MensajeConsola("Se sustituyo el tutor del curso, "+curso, "amarillo")
+	} else {
+		utilities.MensajeConsola("Se agrego un nuevo tutor al curso, "+curso, "verde")
+	}
 }
 
 func (lista *ListaCircularDoble) Recorrer() {
 	if lista.Inicio == nil {
-		fmt.Println("La lista está vacía.")
+		utilities.MensajeConsola("No hay mas Tutores para mostrar", "amarillo")
 		return
 	}
-
+	formato := " ║ %-10s ║ %-32s ║ %-6s ║ %-34s ║\n"
 	actual := lista.Inicio
+	fmt.Println(" ╔═════════════════════════════════════════════════════════════════════════════════════════════╗")
+	fmt.Printf(formato, "Carnet", "Nombre", "Código", "Nombre del Curso")
+	println(" ╠═════════════════════════════════════════════════════════════════════════════════════════════╣")
 	for {
-		fmt.Printf("Carnet: %d, Nombre: %s\n",
-			actual.Estudiante.Carnet, actual.Estudiante.Nombre)
+		fmt.Printf(formato, strconv.Itoa(actual.Estudiante.Carnet), actual.Estudiante.Nombre, actual.Estudiante.Curso, "Curso Nombre")
 		actual = actual.Siguiente
 		if actual == lista.Inicio {
 			break
 		}
 	}
+	println(" ╚═════════════════════════════════════════════════════════════════════════════════════════════╝")
 }
 
 // existencia, nota

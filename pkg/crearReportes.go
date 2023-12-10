@@ -1,7 +1,7 @@
 package pkg
 
 import (
-	"fmt"
+	"Proyecto/pkg/utilities"
 	"os"
 	"os/exec"
 )
@@ -16,7 +16,7 @@ func CrearArchivo(nombre_archivo string) {
 		}
 		defer file.Close()
 	}
-	fmt.Println("Archivo generado exitosamente")
+	utilities.MensajeConsola("Archivo generado exitosamente", "verde")
 }
 
 func EscribirArchivo(contenido string, nombre_archivo string) {
@@ -33,7 +33,7 @@ func EscribirArchivo(contenido string, nombre_archivo string) {
 	if err != nil {
 		return
 	}
-	fmt.Println("Archivo guardado correctamente")
+	utilities.MensajeConsola("Archivo guardado correctamente", "verde")
 }
 
 func Ejecutar(nombre_imagen string, archivo string) {
