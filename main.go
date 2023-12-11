@@ -151,16 +151,15 @@ func opcionesAdmin(opcion int) {
 		fmt.Print("Ingrese la ruta del archivo: ")
 		fmt.Scanln(&ruta)
 		ColaPrioridad.LeerArchivoTutores(ruta)
-		utilities.MensajeConsola("Carga de Estudiantes Tutores exitosa", "verde")
 	case 2:
 		titulos("Carga de Estudiantes")
 		ruta := ""
 		fmt.Print("Ingrese la ruta del archivo: ")
 		fmt.Scanln(&ruta)
 		listaE.LeerArchivo(ruta)
-		utilities.MensajeConsola("Carga de Estudiantes exitosa", "verde")
 	case 3:
 		titulos("Carga Cursos al sistema")
+		ColaPrioridad.ImprimirCola()
 	case 4:
 		titulos("Control de Estudiantes tutores")
 		MenuAceptar()
