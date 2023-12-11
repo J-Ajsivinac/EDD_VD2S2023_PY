@@ -1,6 +1,7 @@
 package cola
 
 import (
+	"Proyecto/pkg/utilities"
 	"encoding/csv"
 	"fmt"
 	"io"
@@ -35,21 +36,18 @@ func (c *Cola) EncolarPrioridad(carnet int, nombre string, curso string, nota in
 		c.Longitud++
 	} else {
 		aux := c.Inicio
-		for aux.Siguiente != nil {
-			if aux.Siguiente.Prioridad > nuevoNodo.Prioridad && aux.Prioridad == nuevoNodo.Prioridad {
-				nuevoNodo.Siguiente = aux.Siguiente
-				aux.Siguiente = nuevoNodo
-				c.Longitud++
-				return
-			} else if aux.Siguiente.Prioridad > nuevoNodo.Prioridad && aux.Prioridad < nuevoNodo.Prioridad {
-				nuevoNodo.Siguiente = aux.Siguiente
-				aux.Siguiente = nuevoNodo
-				c.Longitud++
-				return
-			} else {
-				aux = aux.Siguiente
-			}
+		if aux.Prioridad > nuevoNodo.Prioridad {
+			nuevoNodo.Siguiente = aux
+			c.Inicio = nuevoNodo
+			c.Longitud++
+			return
 		}
+
+		for aux.Siguiente != nil && aux.Siguiente.Prioridad <= nuevoNodo.Prioridad {
+			aux = aux.Siguiente
+		}
+
+		nuevoNodo.Siguiente = aux.Siguiente
 		aux.Siguiente = nuevoNodo
 		c.Longitud++
 	}
@@ -57,7 +55,7 @@ func (c *Cola) EncolarPrioridad(carnet int, nombre string, curso string, nota in
 
 func (c *Cola) Descolar() {
 	if c.Longitud == 0 {
-		fmt.Println("No hay tutores en la cola")
+		utilities.MensajeConsola("No hay tutores en la cola", "rojo")
 	} else {
 		c.Inicio = c.Inicio.Siguiente
 		c.Longitud--
@@ -67,7 +65,7 @@ func (c *Cola) Descolar() {
 func (c *Cola) LeerArchivoTutores(ruta string) {
 	file, err := os.Open(ruta)
 	if err != nil {
-		fmt.Println("No pude abrir el archivo")
+		utilities.MensajeConsola("No pude abrir el archivo", "rojo")
 		return
 	}
 	defer file.Close()
@@ -81,7 +79,7 @@ func (c *Cola) LeerArchivoTutores(ruta string) {
 			break
 		}
 		if err != nil {
-			fmt.Println("No pude leer la linea del csv")
+			utilities.MensajeConsola("No se puede leer la linea del csv", "rojo")
 			continue
 		}
 		if encabezado {
@@ -91,6 +89,15 @@ func (c *Cola) LeerArchivoTutores(ruta string) {
 		valor, _ := strconv.Atoi(linea[0])
 		nota, _ := strconv.Atoi(linea[3])
 		c.EncolarPrioridad(valor, strings.TrimSpace(linea[1]), strings.TrimSpace(linea[2]), nota)
+	}
+	utilities.MensajeConsola("Carga de Estudiantes Tutores exitosa", "verde")
+}
+
+func (c *Cola) ImprimirCola() {
+	aux := c.Inicio
+	for aux != nil {
+		fmt.Println(aux.Tutor.Carnet, aux.Tutor.Nombre, aux.Tutor.Curso, aux.Tutor.Nota, aux.Prioridad)
+		aux = aux.Siguiente
 	}
 }
 
@@ -120,5 +127,5 @@ func (c *Cola) Primero() {
 	fmt.Println("1. Aceptar")
 	fmt.Println("2. Rechazar")
 	fmt.Println("Presione otra tecla para salir")
-	fmt.Print("Eliga una opcion:")
+	fmt.Print(" -> Eliga una opcion: ")
 }

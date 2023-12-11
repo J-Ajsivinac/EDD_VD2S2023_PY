@@ -2,6 +2,7 @@ package listaD
 
 import (
 	"Proyecto/pkg"
+	"Proyecto/pkg/utilities"
 	"encoding/csv"
 	"fmt"
 	"io"
@@ -71,7 +72,8 @@ func (l *ListaDobleE) LoginUser(contra int, carnet int) bool {
 func (l *ListaDobleE) LeerArchivo(ruta string) {
 	file, err := os.Open(ruta)
 	if err != nil {
-		fmt.Println("No pude abrir el archivo")
+		// fmt.Println("No pude abrir el archivo")
+		utilities.MensajeConsola("No se puede abrir el archivo", "rojo")
 		return
 	}
 	defer file.Close()
@@ -95,6 +97,7 @@ func (l *ListaDobleE) LeerArchivo(ruta string) {
 		valor, _ := strconv.Atoi(linea[0])
 		l.Insertar(&Estudiante{Carnet: valor, Nombre: linea[1]})
 	}
+	utilities.MensajeConsola("Carga de Estudiantes exitosa", "verde")
 }
 
 func (l *ListaDobleE) Reporte() {
