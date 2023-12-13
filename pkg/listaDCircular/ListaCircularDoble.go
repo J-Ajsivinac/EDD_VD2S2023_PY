@@ -98,7 +98,7 @@ func (l *ListaCircularDoble) Validar(estudiante *EstudianteTutor) (bool, bool) {
 	for {
 		if aux.Estudiante.Curso == estudiante.Curso {
 			existe = true
-			if estudiante.Nota >= aux.Estudiante.Nota {
+			if estudiante.Nota > aux.Estudiante.Nota {
 				aux.Anterior.Siguiente = aux.Siguiente
 				aux.Siguiente.Anterior = aux.Anterior
 
@@ -118,6 +118,24 @@ func (l *ListaCircularDoble) Validar(estudiante *EstudianteTutor) (bool, bool) {
 	}
 
 	return existe, false
+}
+
+func (l *ListaCircularDoble) Buscar(curso string) *NodoCircularE {
+	if l.Inicio == nil {
+		return nil
+	}
+
+	aux := l.Inicio
+	for {
+		if aux.Estudiante.Curso == curso {
+			return aux
+		}
+		aux = aux.Siguiente
+		if aux == l.Inicio {
+			break
+		}
+	}
+	return nil
 }
 
 func (l *ListaCircularDoble) Reporte() {
