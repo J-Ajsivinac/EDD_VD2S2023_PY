@@ -88,7 +88,7 @@ func (c *Cola) LeerArchivoTutores(ruta string) {
 		}
 		valor, _ := strconv.Atoi(linea[0])
 		nota, _ := strconv.Atoi(linea[3])
-		c.EncolarPrioridad(valor, strings.TrimSpace(linea[1]), strings.TrimSpace(linea[2]), nota)
+		c.EncolarPrioridad(valor, strings.TrimSpace(linea[1]), strings.TrimSpace("0"+linea[2]), nota)
 	}
 	utilities.MensajeConsola("Carga de Estudiantes Tutores exitosa", "verde")
 }

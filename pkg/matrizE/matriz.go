@@ -172,10 +172,10 @@ func (m *Matriz) Insertar_Elemento(carnet_estudiante int, carnet_tutor int, curs
 	}
 }
 
-func (m *Matriz) Reporte(nombre string) {
+func (m *Matriz) Reporte() {
 	texto := ""
 	nombre_archivo := "./reportes/matriz.dot"
-	nombre_imagen := nombre
+	nombre_imagen := "./reportes/matriz.jpg"
 	aux1 := m.Raiz
 	aux2 := m.Raiz
 	aux3 := m.Raiz
