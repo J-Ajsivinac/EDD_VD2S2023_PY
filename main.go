@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Proyecto/pkg/arbolAVL"
 	"Proyecto/pkg/cola"
 	"Proyecto/pkg/listaD"
 	"Proyecto/pkg/listaDCircular"
@@ -16,6 +17,7 @@ var ColaPrioridad *cola.Cola = &cola.Cola{Inicio: nil, Longitud: 0}
 var listaTutores *listaDCircular.ListaCircularDoble = &listaDCircular.ListaCircularDoble{Inicio: nil, Longitud: 0}
 var matriz *matrizE.Matriz = &matrizE.Matriz{Raiz: &matrizE.NodoMatriz{PosX: -1, PosY: -1, Dato: &matrizE.Dato{Carnet_Tutor: 0, Carnet_Estudiante: 0, Curso: "RAIZ"}}, Cantidad_Alumnos: 0, Cantidad_Tutores: 0}
 var cookies int = 0
+var arbolCursos *arbolAVL.Arbol = &arbolAVL.Arbol{Raiz: nil}
 
 func titulos(titulo string) {
 	fmt.Println("")
@@ -33,6 +35,23 @@ func menu() {
 	fmt.Println(" ║                                    ║")
 	fmt.Println(" ║         1. Login                   ║")
 	fmt.Println(" ║         2. Salir                   ║")
+	fmt.Println(" ║                                    ║")
+	fmt.Println(" ╚════════════════════════════════════╝")
+	fmt.Println("")
+	fmt.Print("Ingrese una opcion: ")
+}
+
+func menuReportes() {
+	fmt.Println("")
+	fmt.Println(" ╔════════════════════════════════════╗")
+	fmt.Println(" ║              Reportes              ║")
+	fmt.Println(" ╠════════════════════════════════════╣")
+	fmt.Println(" ║                                    ║")
+	fmt.Println(" ║         1. Alumnos                 ║")
+	fmt.Println(" ║         2. Tutores                 ║")
+	fmt.Println(" ║         3. Asignaciones            ║")
+	fmt.Println(" ║         4. Cursos                  ║")
+	fmt.Println(" ║         5. Salir                   ║")
 	fmt.Println(" ║                                    ║")
 	fmt.Println(" ╚════════════════════════════════════╝")
 	fmt.Println("")
@@ -74,6 +93,7 @@ func menuUsuario() {
 }
 
 func MenuAceptar() {
+	titulos("Control de Estudiantes tutores")
 	opcion := 0
 	salir := false
 
@@ -168,21 +188,75 @@ func opcionesAdmin(opcion int) {
 		fmt.Scanln(&ruta)
 		listaE.LeerArchivo(ruta)
 	case 3:
-		fmt.Print("\033[H\033[2J")
-		titulos("Carga Cursos al sistema")
-		ColaPrioridad.ImprimirCola()
+		cargarCursos()
 	case 4:
-		titulos("Control de Estudiantes tutores")
 		MenuAceptar()
 	case 5:
-		fmt.Print("\033[H\033[2J")
-		titulos("Reportes Estructuras")
-		fmt.Println(listaTutores.Longitud)
-		listaE.Reporte()
-		listaTutores.Reporte()
-		matriz.Reporte("./reportes/matriz.jpg")
+		generarGraficas()
 	default:
 		utilities.MensajeConsola("Opcion no valida", "rojo")
+	}
+}
+
+func generarGraficas() {
+	fmt.Print("\033[H\033[2J")
+	titulos("Reportes Estructuras")
+	opcion := 0
+	salir := false
+
+	for !salir {
+		menuReportes()
+		fmt.Scanln(&opcion)
+		if opcion == 1 {
+			listaE.Reporte()
+		} else if opcion == 2 {
+			listaTutores.Reporte()
+		} else if opcion == 3 {
+			matriz.Reporte()
+		} else if opcion == 4 {
+			arbolCursos.Reporte()
+		} else if opcion == 5 {
+			salir = true
+		} else {
+			utilities.MensajeConsola("Opcion no valida", "rojo")
+		}
+	}
+}
+
+func cargarCursos() {
+	fmt.Print("\033[H\033[2J")
+	titulos("Carga Cursos al sistema")
+	fmt.Print("Ingrese la ruta del archivo: ")
+	ruta := ""
+	fmt.Scanln(&ruta)
+	arbolCursos.LeerJson(ruta)
+
+}
+
+func asignarCursos() {
+	fmt.Print("\033[H\033[2J")
+	titulos("Asignarse a Tutores")
+	var curso string
+	salirCursos := false
+	for !salirCursos {
+		fmt.Print("Ingrese el codigo del curso [0 para salirCursos]: ")
+		fmt.Scanln(&curso)
+		if curso == "0" {
+			salirCursos = true
+			break
+		}
+		if !arbolCursos.Busqueda(curso) {
+			utilities.MensajeConsola("El curso no existe", "rojo")
+			continue
+		}
+		respuesta := listaTutores.Buscar(curso)
+		if respuesta == nil {
+			utilities.MensajeConsola("No hay tutores para el curso "+curso, "rojo")
+			continue
+		}
+		fmt.Println("Usuario: ", cookies)
+		matriz.Insertar_Elemento(cookies, respuesta.Estudiante.Carnet, curso)
+
 	}
 }
 
@@ -193,20 +267,7 @@ func opcionesUsuario(opcion int) {
 		titulos("Ver Tutores Disponibles")
 		listaTutores.Recorrer()
 	case 2:
-		fmt.Print("\033[H\033[2J")
-		titulos("Asignarse a Tutores")
-		curso := ""
-		fmt.Print("Ingrese el curso: ")
-		fmt.Scanln(&curso)
-		// matriz.Insertar_Elemento(cookies, , )
-		respuesta := listaTutores.Buscar(curso)
-		if respuesta == nil {
-			utilities.MensajeConsola("No hay tutores para el curso"+curso, "rojo")
-			return
-		}
-		fmt.Println("Usuario: ", cookies)
-		matriz.Insertar_Elemento(cookies, respuesta.Estudiante.Carnet, curso)
-		matriz.Recorrer()
+		asignarCursos()
 	default:
 		utilities.MensajeConsola("Opcion no valida", "rojo")
 	}
