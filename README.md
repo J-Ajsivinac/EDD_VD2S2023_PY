@@ -1,6 +1,6 @@
 <h1 align="center">Fase 1</h1>
 <p align="center">
-    <a href="#"><img src=""></a>
+    <a href="#"><img src="screenshots/m.png"></a>
 </p>
 <p align="center"></p>
 
@@ -16,11 +16,11 @@
 
 # ⚽ Objetivos
 * **Objetivo General**
-    * Diseñar y desarrollar una aplicación con entorno visual que contenga un analizador léxico y sintáctico que lea instrucciones determiandas.
+    * Aplicar los conocimientos del curso de Estructuras de Datos en el desarrollo de diferentes estructuras de datos y los diferentes algoritmos de manipulación de información en ellas.
 * **Objetivos Específicos**
-    * Elaborar un sistema que proporcione una interfaz agradable a la vista para interactuar con los analizadores de una forma intuitiva.
-    * Generar gráficas para la visualización correcta del orden de las opeaciones por medio de la libreria Graphviz de Python
-    * Obtener reportes en formato `html` de los resultados de los analizadores
+    * Utilizar el lenguaje Go para implementar estructuras de datos no lineales.
+    * Utilizar la herramienta Graphviz para graficar las estructuras de datos.
+    * Definir e implementar algoritmos de ordenamiento, búsqueda e inserción en las diferentes estructuras a implementar
 
 
 # 📍 Manual de Usuario
@@ -34,9 +34,6 @@
         <li>Linux: Ubuntu, Debian, CentOS, Fedora, etc.</li>
     </ul>
     <li>Go 1.21.4 o Superior</li>
-    <li>Librerías de Python</li>
-    <ul>
-    <li>Graphviz 8.1.0 o Superior</li>
 </ul>
 
 
@@ -169,7 +166,7 @@ Al ingresar como alumno se le mostrarán las siguientes opciones
 **Ver Tutores Disponibles**
 En esta opción se desplegará el listado de estudiantes tutores aceptados junto con el codigo del curso que tienen a su cargo
 <p align="center">
-    <a href="#"><img src="screenshots/c.png"></a>
+    <a href="#"><img src="screenshots/c11.png"></a>
 </p>
 
 **Asignarse a Tutores**
@@ -209,6 +206,8 @@ La aplicación se maneja desde el archivo `main.go`, teniendo las estructuras y 
 
 <h3>Main</h3>
 
+___
+
 Dentro de este archivo se encuentran los menus, y la logica para cada parte de los diferentes menus, los menus están encerrados dentro de un bucle para poder volver a repetir las acciones las veces que el usuario las requiera.
 
 Asi mismo, es en donde se implementan las estructuras necesarias para el manejo de datos como los son:
@@ -220,6 +219,8 @@ Asi mismo, es en donde se implementan las estructuras necesarias para el manejo 
 * Arból AVL
 
 ### PKG
+___
+
 Dentro de esta carpeta se encuantra el código para cada estructura de dato usada.
 
 * **Lista Doblemente Enlazada**
@@ -424,7 +425,7 @@ El sistema cuenta con mensajes en consola con colores e iconos que ejemplifican 
 ![Captura 2](screenshots/listadoble.jpg)
 <p align="center">Gráfica de la lista doblemente enlazada</p>
 
-![Captura 3](screenshots/listadoblecircular.jpg)
+![Captura 3](screenshots/tutores.jpg)
 <p align="center">Gráfica de la lista circular doblemente enlazada</p>
 
 <p align="center">
