@@ -117,13 +117,13 @@ func MenuAceptar() {
 }
 
 func login(usuario string, contra string) {
-	if usuario == "admin" && contra == "admin" {
+	if usuario == "ADMIN_202200135" && contra == "admin" {
 		for {
 			menuAdmin()
 			var opcionL int
 			fmt.Scanln(&opcionL)
 			if opcionL == 6 {
-				fmt.Println("\n Saliendo del administrador \n")
+				utilities.MensajeConsola("Saliendo del administrador", "verde")
 				break
 			}
 			opcionesAdmin(opcionL)
@@ -133,13 +133,14 @@ func login(usuario string, contra string) {
 		valor, _ := strconv.Atoi(contra)
 		if listaE.LoginUser(user, valor) {
 			cookies = user
-			fmt.Println("Login exitoso")
+			fmt.Print("\033[H\033[2J")
+			fmt.Print(" 👋 Bienvenido ", usuario, "\n")
 			for {
 				menuUsuario()
 				var opcionL int
 				fmt.Scanln(&opcionL)
 				if opcionL == 3 {
-					fmt.Println("Saliendo del Usuario")
+					utilities.MensajeConsola("Saliendo del usuario", "verde")
 					cookies = 0
 					break
 				}
@@ -164,7 +165,7 @@ func opcionesLogin(opcion int) {
 		fmt.Scanln(&contra)
 		login(usuario, contra)
 	case 2:
-		fmt.Println("\n Saliendo del sistema \n")
+		utilities.MensajeConsola("Saliendo del sistema", "verde")
 		os.Exit(0)
 	default:
 		utilities.MensajeConsola("Opcion no valida", "rojo")
@@ -234,12 +235,11 @@ func cargarCursos() {
 }
 
 func asignarCursos() {
-	fmt.Print("\033[H\033[2J")
 	titulos("Asignarse a Tutores")
 	var curso string
 	salirCursos := false
 	for !salirCursos {
-		fmt.Print("Ingrese el codigo del curso [0 para salirCursos]: ")
+		fmt.Print("Ingrese el codigo del curso [0 para salir]: ")
 		fmt.Scanln(&curso)
 		if curso == "0" {
 			salirCursos = true
@@ -254,9 +254,7 @@ func asignarCursos() {
 			utilities.MensajeConsola("No hay tutores para el curso "+curso, "rojo")
 			continue
 		}
-		fmt.Println("Usuario: ", cookies)
 		matriz.Insertar_Elemento(cookies, respuesta.Estudiante.Carnet, curso)
-
 	}
 }
 
