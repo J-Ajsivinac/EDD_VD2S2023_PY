@@ -126,6 +126,6 @@ func (c *Cola) Primero() {
 	fmt.Println("")
 	fmt.Println("1. Aceptar")
 	fmt.Println("2. Rechazar")
-	fmt.Println("Presione otra tecla para salir")
+	fmt.Println("Presione otro numero para salir")
 	fmt.Print(" -> Eliga una opcion: ")
 }

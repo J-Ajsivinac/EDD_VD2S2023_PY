@@ -4,7 +4,6 @@ import (
 	"Proyecto/pkg"
 	"Proyecto/pkg/utilities"
 	"encoding/json"
-	"log"
 	"math"
 	"os"
 	"strconv"
@@ -128,9 +127,13 @@ func (a *Arbol) Busqueda(valor string) bool {
 
 // Reporte Grafico
 func (a *Arbol) Reporte() {
+	if a.Raiz == nil {
+		utilities.MensajeConsola("No hay cursos para graficar", "rojo")
+		return
+	}
 	cadena := ""
-	nombre_archivo := "./reportes/Arbol.dot"
-	nombre_imagen := "./reportes/Arbol.jpg"
+	nombre_archivo := "./reportes/cursos.dot"
+	nombre_imagen := "./reportes/cursos.jpg"
 	if a.Raiz != nil {
 		cadena += "digraph arbol{ "
 		cadena += a.retornarValoresArbol(a.Raiz, 0)
@@ -189,13 +192,15 @@ func (a *Arbol) retornarValoresArbol(raiz *NodoArbol, indice int) string {
 func (a *Arbol) LeerJson(ruta string) {
 	data, err := os.ReadFile(ruta)
 	if err != nil {
-		log.Fatal("Error al leer el archivo:", err)
+		utilities.MensajeConsola("No pude abrir el archivo", "rojo")
+		return
 	}
 
 	var datos DatosCursos
 	err = json.Unmarshal(data, &datos)
 	if err != nil {
-		log.Fatal("Error al decodificar el JSON:", err)
+		utilities.MensajeConsola("Error al decodificar el JSON", "rojo")
+		return
 	}
 
 	for _, curso := range datos.Cursos {

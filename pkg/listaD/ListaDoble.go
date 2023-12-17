@@ -102,11 +102,11 @@ func (l *ListaDobleE) LeerArchivo(ruta string) {
 
 func (l *ListaDobleE) Reporte() {
 	if l.Longitud == 0 {
-		fmt.Println("No hay mas Alumnos para graficar")
+		utilities.MensajeConsola("No hay mas Alumnos para graficar", "rojo")
 		return
 	}
-	nombreArchivo := "./reportes/listadoble.dot"
-	nombreImagen := "./reportes/listadoble.jpg"
+	nombreArchivo := "./reportes/alumnos.dot"
+	nombreImagen := "./reportes/alumnos.jpg"
 	texto := "digraph lista{\n"
 	texto += "rankdir=LR;\n"
 	texto += "node[shape = record fontname=Verdana];\n"

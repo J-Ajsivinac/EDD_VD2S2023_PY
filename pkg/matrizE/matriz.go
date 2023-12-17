@@ -2,6 +2,7 @@ package matrizE
 
 import (
 	"Proyecto/pkg"
+	"Proyecto/pkg/utilities"
 	"fmt"
 	"strconv"
 )
@@ -113,36 +114,10 @@ func (m *Matriz) Recorrer() {
 	}
 }
 
-/*
-primer caso
-	logeado -> 2017..... -> 0770 -> 2001
-	Codigo de Curso a asignar: 0770
-	Agregar al tutor y al alumno. Finalizo flujo
-
-	logeado -> 2018..... -> 0771 -> 2002
-	Codigo de Curso a asignar: 0771
-	Agregar al tutor y al alumno. Finaliza flujo
-
-Segundo Caso
-	logeado -> 2019..... ->0770 -> 2001
-	Codigo de Curso a asignar: 0770
-	Agrega al estudiante}
-
-Tercer Caso
-	logeado -> 2017..... -> 0980 -> 2005
-	Codigo de Curso a asignar: 0980
-	Agregar al tutor. Finalizo flujo
-
-Cuarto Caso
-	logeado -> 2017..... -> 0771 -> 2002
-	Codigo de Curso a asignar: 0771
-	Finalizo flujo
-*/
-
 func (m *Matriz) Insertar_Elemento(carnet_estudiante int, carnet_tutor int, curso string) {
 	nodoColumna := m.buscarColumna(carnet_tutor, curso)
 	nodoFila := m.buscarFila(carnet_estudiante)
-
+	// No existe el alumno y el tutor en la matriz
 	if nodoColumna == nil && nodoFila == nil {
 		nodoColumna = m.nuevaColumna(m.Cantidad_Tutores, carnet_tutor, curso)
 		nodoFila = m.nuevaFila(m.Cantidad_Alumnos, carnet_estudiante, curso)
@@ -151,31 +126,35 @@ func (m *Matriz) Insertar_Elemento(carnet_estudiante int, carnet_tutor int, curs
 		nuevoNodo := &NodoMatriz{PosX: nodoColumna.PosX, PosY: nodoFila.PosY, Dato: &Dato{Carnet_Tutor: carnet_tutor, Carnet_Estudiante: carnet_estudiante, Curso: curso}}
 		nuevoNodo = m.insertarColumna(nuevoNodo, nodoFila)
 		nuevoNodo = m.insertarFila(nuevoNodo, nodoColumna)
+		// No existe el alumno en la matriz pero si el Alumno
 	} else if nodoColumna != nil && nodoFila == nil {
 		nodoFila = m.nuevaFila(m.Cantidad_Alumnos, carnet_estudiante, curso)
 		m.Cantidad_Alumnos++
 		nuevoNodo := &NodoMatriz{PosX: nodoColumna.PosX, PosY: nodoFila.PosY, Dato: &Dato{Carnet_Tutor: carnet_tutor, Carnet_Estudiante: carnet_estudiante, Curso: curso}}
 		nuevoNodo = m.insertarColumna(nuevoNodo, nodoFila)
 		nuevoNodo = m.insertarFila(nuevoNodo, nodoColumna)
+		//No existe el tutor en la matriz pero si el alumno
 	} else if nodoColumna == nil && nodoFila != nil {
 		nodoColumna = m.nuevaColumna(m.Cantidad_Tutores, carnet_tutor, curso)
 		m.Cantidad_Tutores++
 		nuevoNodo := &NodoMatriz{PosX: nodoColumna.PosX, PosY: nodoFila.PosY, Dato: &Dato{Carnet_Tutor: carnet_tutor, Carnet_Estudiante: carnet_estudiante, Curso: curso}}
 		nuevoNodo = m.insertarColumna(nuevoNodo, nodoFila)
 		nuevoNodo = m.insertarFila(nuevoNodo, nodoColumna)
+		// Las cabeceras existen
 	} else if nodoColumna != nil && nodoFila != nil {
 		nuevoNodo := &NodoMatriz{PosX: nodoColumna.PosX, PosY: nodoFila.PosY, Dato: &Dato{Carnet_Tutor: carnet_tutor, Carnet_Estudiante: carnet_estudiante, Curso: curso}}
 		nuevoNodo = m.insertarColumna(nuevoNodo, nodoFila)
 		nuevoNodo = m.insertarFila(nuevoNodo, nodoColumna)
 	} else {
-		fmt.Println("ERROR!!!")
+		utilities.MensajeConsola("Error al insertar el elemento", "rojo")
 	}
+	utilities.MensajeConsola("Se agrego el estudiante "+strconv.Itoa(carnet_estudiante)+" al curso "+curso, "verde")
 }
 
 func (m *Matriz) Reporte() {
 	texto := ""
-	nombre_archivo := "./reportes/matriz.dot"
-	nombre_imagen := "./reportes/matriz.jpg"
+	nombre_archivo := "./reportes/asignaciones.dot"
+	nombre_imagen := "./reportes/asignaciones.jpg"
 	aux1 := m.Raiz
 	aux2 := m.Raiz
 	aux3 := m.Raiz
@@ -205,7 +184,6 @@ func (m *Matriz) Reporte() {
 				} else {
 					texto += "nodo" + strconv.Itoa(aux1.PosX+1) + strconv.Itoa(aux1.PosY+1) + "[label=\"" + aux1.Dato.Curso + "\" ,group=" + strconv.Itoa(aux1.PosX+1) + "]; \n"
 				}
-
 				aux1 = aux1.Siguiente
 			}
 			texto += "}"
@@ -234,7 +212,6 @@ func (m *Matriz) Reporte() {
 	} else {
 		texto = "No hay elementos en la matriz"
 	}
-	//fmt.Println(texto)
 	pkg.CrearArchivo(nombre_archivo)
 	pkg.EscribirArchivo(texto, nombre_archivo)
 	pkg.Ejecutar(nombre_imagen, nombre_archivo)

@@ -71,19 +71,19 @@ func (lista *ListaCircularDoble) Recorrer() {
 		utilities.MensajeConsola("No hay mas Tutores para mostrar", "amarillo")
 		return
 	}
-	formato := " ║ %-10s ║ %-32s ║ %-6s ║ %-34s ║\n"
+	formato := " ║ %-10s ║ %-36s ║ %-6s ║\n"
 	actual := lista.Inicio
-	fmt.Println(" ╔═════════════════════════════════════════════════════════════════════════════════════════════╗")
-	fmt.Printf(formato, "Carnet", "Nombre", "Código", "Nombre del Curso")
-	println(" ╠═════════════════════════════════════════════════════════════════════════════════════════════╣")
+	fmt.Println(" ╔════════════════════════════════════════════════════════════╗")
+	fmt.Printf(formato, "Carnet", "Nombre", "Código")
+	println(" ╠════════════════════════════════════════════════════════════╣")
 	for {
-		fmt.Printf(formato, strconv.Itoa(actual.Estudiante.Carnet), actual.Estudiante.Nombre, actual.Estudiante.Curso, "Curso Nombre")
+		fmt.Printf(formato, strconv.Itoa(actual.Estudiante.Carnet), actual.Estudiante.Nombre, actual.Estudiante.Curso)
 		actual = actual.Siguiente
 		if actual == lista.Inicio {
 			break
 		}
 	}
-	println(" ╚═════════════════════════════════════════════════════════════════════════════════════════════╝")
+	println(" ╚════════════════════════════════════════════════════════════╝")
 }
 
 // existencia, nota
@@ -140,11 +140,11 @@ func (l *ListaCircularDoble) Buscar(curso string) *NodoCircularE {
 
 func (l *ListaCircularDoble) Reporte() {
 	if l.Longitud == 0 {
-		fmt.Println("No hay mas Tutores para graficar")
+		utilities.MensajeConsola("No hay Tutores para graficar", "rojo")
 		return
 	}
-	nombreArchivo := "./reportes/listadoblecircular.dot"
-	nombreImagen := "./reportes/listadoblecircular.jpg"
+	nombreArchivo := "./reportes/tutores.dot"
+	nombreImagen := "./reportes/tutores.jpg"
 	texto := "digraph lista{\n"
 	texto += "rankdir=LR;\n"
 	texto += "node[shape = record fontname=Verdana];\n"
