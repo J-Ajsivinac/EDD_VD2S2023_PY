@@ -8,7 +8,7 @@
 🙍‍♂️ Joab Israel Ajsivinac Ajsivinac 🆔 202200135
 </div>
 <div align="center">
-📕 Introducción a la Programación y Computación 2
+📕 Estructura de Datos
 </div>
 <div align="center"> 🏛 Universidad San Carlos de Guatemala</div>
 <div align="center"> 📆 Vacaciones Diciembre 2023</div>
