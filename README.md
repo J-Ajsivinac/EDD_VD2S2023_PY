@@ -77,10 +77,10 @@ ADMIN_202200135
 
 **Contraseña:**
 ```bash
-Admin
+admin
 ```
 
-Para ingresar como estudiante el usuario y contraseña son el número de carnet.
+Para ingresar como estudiante el usuario y contraseña son el número de carnet, siempre y cuando ya se tenga cargados los alumnos desde el administrador.
 
 ### Administrador
 Al ingresar como administrador se visualizara el siguiente menú
@@ -170,6 +170,7 @@ En esta opción se desplegará el listado de estudiantes tutores aceptados junto
 </p>
 
 **Asignarse a Tutores**
+
 En esta opción se le solicitará el codigo del curso al cual se quiere asignar
 <p align="center">
     <a href="#"><img src="screenshots/c10.png"></a>
@@ -373,7 +374,7 @@ en este metodo se verifica primero si el elemento es el primero para poder asign
  
  ```
  Izquierda: Valores menores a la raiz
- Derecha: Valroes mayores a la raiz
+ Derecha: Valores mayores a la raiz
  ```
 
  Luego se obtiene el maximo entre las dos ramas (izquierda y derecha)
