@@ -2,6 +2,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
 import Login from './pages/Login'
+import LandingAdmin from './pages/LandingAdmin'
 
 function App() {
 
@@ -10,7 +11,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/about" element={<h1>About</h1>} />
+          <Route path="/admin" element={<LandingAdmin />} />
         </Routes>
       </BrowserRouter>
     </>
