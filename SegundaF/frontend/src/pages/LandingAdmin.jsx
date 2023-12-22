@@ -5,7 +5,7 @@ function LandingAdmin() {
         <div className='flex h-screen bg-bg-dark'>
             <Navbar></Navbar>
             <ContainerMain>
-                <div className='flex items-center justify-center w-3/5 py-4 px-6 rounded-lg flex-col gap-4 text-white h-2/3'>
+                <div className='flex items-center justify-center w-2/3 py-4 px-6 rounded-lg flex-col gap-4 text-white h-2/3'>
                     <div className='flex flex-col items-center justify-center gap-8'>
                         <span className='text-5xl font-light mt-2 text-center'>
                             Bienvenido <span className='font-normal text-[#baa8e8]'>Administrador</span>
@@ -13,7 +13,7 @@ function LandingAdmin() {
                         <span className='text-center text-[#a9a9a9] text-lg'>Simplifica la gestión educativa con nuestro administrador especializado. Desde la inscripción de alumnos hasta la generación de reportes, hemos cubierto cada aspecto para que puedas centrarte en ofrecer una educación de calidad</span>
                     </div>
                 </div>
-                <div className='flex items-center justify-center w-3/5 py-4 px-6 rounded-lg flex-row
+                <div className='flex items-center justify-center w-2/3 py-4 px-6 rounded-lg flex-row
                 gap-1 text-white bg-sub-dark'>
                     <div className='flex items-center text-center justify-center w-1/3 py-4 px-6 rounded-lg flex-col gap-4 text-white bg-sub-dark'>
                         Registra Alumnos, Tutores y Cursos sin Esfuerzo, Carga y gestiona información detallada de manera eficiente.
