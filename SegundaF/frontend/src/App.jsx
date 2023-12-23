@@ -7,6 +7,10 @@ import LoadCourses from './pages/LoadCourses'
 import AcceptBooks from './pages/AcceptBooks'
 import LoadStudents from './pages/LoadStudents'
 import Report from './pages/Report'
+import TutorBooks from './pages/TutorBooks'
+import StudentBooks from './pages/StudentBooks'
+import Courses from './pages/Courses'
+import Pubs from './pages/Pubs'
 
 function App() {
 
@@ -15,11 +19,18 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/admin" element={<LandingAdmin />} />
-          <Route path="/load/courses" element={<LoadCourses />} />
-          <Route path="/load/students" element={<LoadStudents />} />
-          <Route path="/accept" element={<AcceptBooks />} />
-          <Route path="/report" element={<Report />} />
+          {/* Administrador */}
+          <Route path="/admin/index" element={<LandingAdmin />} />
+          <Route path="/admin/load/courses" element={<LoadCourses />} />
+          <Route path="/admin/load/students" element={<LoadStudents />} />
+          <Route path="/admin/accept" element={<AcceptBooks />} />
+          <Route path="/admin/report" element={<Report />} />
+          {/* Tutor */}
+          <Route path="/tutor/books" element={<TutorBooks />} />
+          {/* Estudiante */}
+          <Route path="/student/pubs" element={<Pubs />} />
+          <Route path="/student/courses" element={<Courses />} />
+          <Route path="/student/books" element={<StudentBooks />} />
         </Routes>
       </BrowserRouter>
     </>
