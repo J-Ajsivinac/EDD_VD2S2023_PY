@@ -2,13 +2,36 @@ import { Card } from '../components/Card'
 import { FaCircleUser } from "react-icons/fa6";
 import { FaKey } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa6";
+import { useForm } from 'react-hook-form'
+import { loginRequest } from '../api/auth'
+import { Toaster, toast } from 'sonner';
+import { useNavigate } from 'react-router-dom'
+
 function Login() {
+    const { register, handleSubmit, formState: { errors } } = useForm()
+    const navigate = useNavigate()
+
+    const signin = async (user) => {
+        try {
+            const res = await loginRequest(user)
+            console.log(res)
+            navigate("/student/courses")
+        } catch (error) {
+            toast.error(`${error.response.data.error}`, { duration: 2000 })
+        }
+    }
+
+    const onSubmit = handleSubmit(data => {
+        console.log(data)
+        signin(data)
+    })
+
     return (
         <div className='flex h-screen items-center justify-center bg-bg-dark'>
             <Card>
                 <h1 className='text-2xl font-bold text-white text-center'>ProjectUp</h1>
                 <span className='text-text-gray text-center'>Bienvenido de nuevo</span>
-                <form className='flex flex-col gap-5 mt-6'>
+                <form onSubmit={onSubmit} className='flex flex-col gap-5 mt-6'>
                     <div className="flex flex-col">
                         <div className="relative">
                             <div className="absolute flex border border-transparent left-0 top-0 h-full w-12 p-2">
@@ -16,13 +39,14 @@ function Login() {
                                     <FaCircleUser size={20} />
                                 </div>
                             </div>
-                            <input id="name"
-                                name="name"
+                            <input id="carnet"
+                                {...register("carnet", { required: true })}
+                                name="carnet"
                                 type="text"
                                 placeholder="Carnet"
                                 className="text-sm sm:text-base relative w-full rounded-md border-2 border-sub-dark bg-sub-dark placeholder-gray-400 focus:border-indigo-400 focus:outline-none py-3 pr-2 pl-12 text-white" />
                         </div>
-                    </div>
+                        {errors.carnet && (<p className='text-red-400  my-1'>El Carnet es requerido</p>)}                        </div>
                     <div className="flex flex-col">
                         <div className="relative">
                             <div className="absolute flex border border-transparent left-0 top-0 h-full w-12 p-2">
@@ -30,12 +54,14 @@ function Login() {
                                     <FaKey size={20} />
                                 </div>
                             </div>
-                            <input id="name"
-                                name="name"
+                            <input id="contrasena"
+                                name="contrasena"
+                                {...register("contrasena", { required: true })}
                                 type="password"
                                 placeholder="Contraseña"
                                 className="text-sm sm:text-base relative w-full rounded-md border-2 border-sub-dark bg-sub-dark placeholder-gray-400 focus:border-indigo-400 focus:outline-none py-3 pr-2 pl-12 text-white" />
                         </div>
+                        {errors.contrasena && (<p className='w-full text-red-400'>La Contraseña es requerida</p>)}
                     </div>
                     <div className="inline-flex items-center">
                         <label className="relative flex items-center pe-3 rounded-full cursor-pointer" htmlFor="check">
@@ -55,6 +81,7 @@ function Login() {
                     <button className='bg-btn-primary hover:bg-btn-primary-hover text-white font-bold py-2 px-2 rounded-md mt-2 transition-transform hover:transition-all ease-in-out duration-150'>Iniciar sesión</button>
                 </form>
             </Card>
+            <Toaster position="top-center" richColors theme="dark" />
         </div>
     )
 }
