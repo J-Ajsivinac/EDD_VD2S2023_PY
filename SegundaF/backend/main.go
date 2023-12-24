@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 var tablaHash = tabla.TablaHash{Tabla: make(map[int]tabla.NodoHash), Capacidad: 7, Utilizacion: 0}
@@ -19,12 +20,12 @@ func Login(c *fiber.Ctx) error {
 			"error": "Bad Request",
 		})
 	}
-	if login.Usuario == "admin" && login.Contrasena == "admin" {
+	if login.Carnet == "admin" && login.Contrasena == "admin" {
 		return c.JSON(fiber.Map{
 			"message": "Login success",
 		})
 	} else {
-		carnet, _ := strconv.Atoi(login.Usuario)
+		carnet, _ := strconv.Atoi(login.Carnet)
 		user, resp := tablaHash.BuscarUsuario(carnet, login.Contrasena)
 		if resp {
 			return c.JSON(fiber.Map{
@@ -33,8 +34,8 @@ func Login(c *fiber.Ctx) error {
 				"nombre":  user.Nombre,
 			})
 		} else {
-			return c.Status(fiber.StatusOK).JSON(fiber.Map{
-				"error": "No ser registro",
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"error": "Credenciales Incorectas",
 			})
 		}
 
@@ -74,6 +75,7 @@ func main() {
 	fmt.Println("Hello World")
 
 	app := fiber.New()
+	app.Use(cors.New())
 	app.Post("/login", Login)
 	app.Post("/upload", cargarEstudiantes)
 	app.Get("/imprimir", imprimir)

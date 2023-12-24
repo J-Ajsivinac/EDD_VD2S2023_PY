@@ -1,6 +1,6 @@
 package schemas
 
 type Login struct {
-	Usuario    string `json:"usuario"`
+	Carnet     string `json:"carnet"`
 	Contrasena string `json:"contrasena"`
 }
