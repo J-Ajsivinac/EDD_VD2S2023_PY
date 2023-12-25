@@ -1,19 +1,38 @@
 import { Link } from 'react-router-dom'
-import { LuSchool, LuFile, LuBookOpenCheck, LuClipboard } from "react-icons/lu";
-
+import { LuSchool, LuBookOpenCheck, LuLogOut, LuFile, LuClipboard } from "react-icons/lu";
+import PropTypes from 'prop-types';
+import Modal from './Modal'
 export function Navbar() {
+    const opcionesAdminC = [
+        { text: 'Cursos', link: '/admin/load/courses' },
+        { text: 'Tutores', link: '/admin/load/courses' },
+        { text: 'Estudiantes', link: '/admin/load/students' },
+    ]
+
+    const opcionesAdminR = [
+        { text: 'Arbol B', link: '/admin/report' },
+        { text: 'Grafo', link: '/admin/report' },
+        { text: 'Merkle', link: '/admin/report' },
+    ]
+
     return (
         <nav className="fixed top-0 w-full bg-panel-dark flex justify-between py-4 px-10 text-white items-center">
-            <Link to="/" className="text-xl font-bold flex flex-row items-center gap-2">
+            <Link to="/student/courses" className="text-xl font-bold flex flex-row items-center gap-2">
                 <LuSchool size={30} />
                 <span> ProjectUp</span>
             </Link>
 
-            <ul className="flex gap-x-3 items-center text-[#d6d6d6] font-semibold">
-                <li className='flex flex-row items-center gap-2 px-4 py-3 hover:bg-alt-dark rounded-lg hover:text-white cursor-pointer'><LuFile size={20} />Cargar</li>
-                <li className='flex flex-row items-center gap-2 px-4 py-3 hover:bg-alt-dark rounded-lg hover:text-white cursor-pointer'><LuBookOpenCheck size={20} />Libros</li>
-                <li className='flex flex-row items-center gap-2 px-4 py-3 hover:bg-alt-dark rounded-lg hover:text-white cursor-pointer'><LuClipboard size={20} />Reportes</li>
+            <ul className="relative flex gap-x-3 items-center text-[#d6d6d6] font-semibold">
+                <Modal opciones={opcionesAdminC} name="Cursos" position={66} Icon={LuFile} />
+                <Link to="/admin/accept" className='flex flex-row items-center gap-2 px-4 py-3 hover:bg-alt-dark rounded-lg hover:text-white cursor-pointer'><LuBookOpenCheck size={20} />Libros</Link>
+                <Modal opciones={opcionesAdminR} name="Reportes" position={15} Icon={LuClipboard} />
+                <Link to="/" className='flex flex-row items-center gap-2 px-3 py-3 hover:bg-alt-dark rounded-lg hover:text-white cursor-pointer'><LuLogOut size={20} /></Link>
+
             </ul>
         </nav>
     )
 }
+
+Navbar.propTypes = {
+    mode: PropTypes.node,
+};

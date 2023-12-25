@@ -8,7 +8,7 @@ function LandingAdmin() {
                 <div className='flex items-center justify-center w-2/3 py-4 px-6 rounded-lg flex-col gap-4 text-white h-2/3'>
                     <div className='flex flex-col items-center justify-center gap-8'>
                         <span className='text-5xl font-light mt-2 text-center'>
-                            Bienvenido <span className='font-normal text-[#baa8e8]'>Administrador</span>
+                            Bienvenido <span className='font-normal text-[#7696f6]'>Administrador</span>
                         </span>
                         <span className='text-center text-[#a9a9a9] text-lg'>Simplifica la gestión educativa con nuestro administrador especializado. Desde la inscripción de alumnos hasta la generación de reportes, hemos cubierto cada aspecto para que puedas centrarte en ofrecer una educación de calidad</span>
                     </div>

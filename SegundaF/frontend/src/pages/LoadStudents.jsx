@@ -1,17 +1,37 @@
 import { Navbar } from '../components/Navbar'
 import { ContainerMain } from '../components/ContainerMain'
+import Uploader from '../components/uploader'
+import axios from 'axios';
+import { API_URL } from "../config";
 
 function LoadStudents() {
+
+    const handleUploadStudents = async (file) => {
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+            const resp = await axios.post(`${API_URL}/upload`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            console.log(resp)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     return (
         <div className='flex h-screen bg-bg-dark'>
             <Navbar></Navbar>
             <ContainerMain>
-                <div className='flex w-full h-full mt-4 items-center flex-col '>
-                    <div className='flex flex-col w-2/3 bg-panel-dark px-2 py-4'>
-                        <div className='flex justify-between w-full bg-panel-dark items-center px-5'>
-                            <h2 className='text-white font-bold text-lg'>Cargar Estudiantes</h2>
-                            <button className='bg-btn-primary hover:bg-btn-primary-hover text-white font-bold py-2 px-7 rounded-md transition-transform hover:transition-all ease-in-out duration-150'>Cargar</button>
-                        </div>
+                <div className='flex w-full h-full mt-3 items-center flex-col gap-4 '>
+                    <div className='flex items-start justify-center w-2/3 py-4 px-6 rounded-lg flex-col gap-4 text-white bg-panel-dark'>
+                        <h2 className='font-bold text-xl'>Cargar Estudiantes</h2>
+                        <Uploader height={"30"} onUpload={handleUploadStudents} />
+                    </div>
+                    <div className='flex flex-col w-2/3 bg-panel-dark py-4 px-6  rounded-lg'>
+                        <h2 className='text-white font-bold text-lg'>Lista de Estudiantes</h2>
                         <div className='flex w-full px-5 mt-5 text-white'>
                             <table className='w-full'>
                                 <thead>

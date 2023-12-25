@@ -13,6 +13,7 @@ export default {
         'alt-dark': '#333a4b',
         'border-dark':'#404040',
         'text-gray':'#87888b',
+        'text-gray-1':'#9ea2ab',
         'btn-primary':'#6577f4',
         'btn-primary-hover':'#5666D1',
       }

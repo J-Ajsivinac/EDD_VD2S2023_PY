@@ -12,10 +12,13 @@ function Login() {
     const navigate = useNavigate()
 
     const signin = async (user) => {
+        console.log(user)
         try {
             const res = await loginRequest(user)
             console.log(res)
-            navigate("/student/courses")
+            if (res.data.mode === 'admin') navigate("/admin/index")
+            else if (res.data.mode === 'user') navigate("/student/courses")
+            else if (res.data.mode === 'tutor') navigate("/tutor/books")
         } catch (error) {
             toast.error(`${error.response.data.error}`, { duration: 2000 })
         }
@@ -67,7 +70,8 @@ function Login() {
                         <label className="relative flex items-center pe-3 rounded-full cursor-pointer" htmlFor="check">
                             <input type="checkbox"
                                 className="before:content[''] peer relative h-6 w-6 cursor-pointer appearance-none rounded-md border-2 border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-[#443300] checked:bg-[#f3edb9] checked:hover:before:opacity-100 "
-                                id="check" />
+                                id="check"
+                                {...register("tutor")} />
                             <span
                                 className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-full peer-checked:opacity-100">
                                 <FaCheck size={12} color="#181718" />
