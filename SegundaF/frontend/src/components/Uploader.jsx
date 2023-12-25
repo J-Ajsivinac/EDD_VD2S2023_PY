@@ -14,8 +14,18 @@ function Uploader({ height, onUpload }) {
         const file = e.target[0].files[0];
         if (file) {
             onUpload(file);
+            restart();
         }
     }
+
+    const restart = () => {
+        setFileName('No se ha seleccionado un archivo')
+        const inputFile = document.querySelector('.input-f');
+        if (inputFile) {
+            inputFile.value = '';
+        }
+    }
+
 
     return (
         <div className="w-full">
@@ -40,11 +50,7 @@ function Uploader({ height, onUpload }) {
                             <LuTrash2 size={20} color="#f54e5d"
                                 className="cursor-pointer"
                                 onMouseDown={() => {
-                                    setFileName('No se ha seleccionado un archivo')
-                                    const inputFile = document.querySelector('.input-f');
-                                    if (inputFile) {
-                                        inputFile.value = '';
-                                    }
+                                    restart()
                                 }} />
                         </span>
                     </section>

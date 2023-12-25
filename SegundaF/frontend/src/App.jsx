@@ -24,7 +24,7 @@ function App() {
           <Route path="/admin/load/courses" element={<LoadCourses />} />
           <Route path="/admin/load/students" element={<LoadStudents />} />
           <Route path="/admin/accept" element={<AcceptBooks />} />
-          <Route path="/admin/report" element={<Report />} />
+          <Route path="/admin/report/:graph" element={<Report />} />
           {/* Tutor */}
           <Route path="/tutor/books" element={<TutorBooks />} />
           {/* Estudiante */}

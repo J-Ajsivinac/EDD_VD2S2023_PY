@@ -1,7 +1,10 @@
 import { Navbar } from '../components/Navbar'
 import { ContainerMain } from '../components/ContainerMain'
+import { useParams } from 'react-router-dom'
 
 function Report() {
+    const { graph } = useParams()
+
     return (
         <div className='flex h-screen bg-bg-dark'>
             <Navbar></Navbar>
@@ -12,7 +15,7 @@ function Report() {
                             <h2 className='text-white font-bold text-lg'>Reporte</h2>
                             <div className='flex gap-3 text-white items-center'>
                                 <span className='font-medium'>Tipo</span>
-                                <span className='px-4 bg-alt-dark py-2 rounded-lg'>Arbol B</span>
+                                <span className='px-4 bg-alt-dark py-2 rounded-lg'>{graph}</span>
                             </div>
 
                         </div>

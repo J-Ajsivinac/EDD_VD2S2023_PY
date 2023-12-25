@@ -20,7 +20,7 @@ function Login() {
             else if (res.data.mode === 'user') navigate("/student/courses")
             else if (res.data.mode === 'tutor') navigate("/tutor/books")
         } catch (error) {
-            toast.error(`${error.response.data.error}`, { duration: 2000 })
+            toast.error(`${error.response.data.message}`, { duration: 2000 })
         }
     }
 

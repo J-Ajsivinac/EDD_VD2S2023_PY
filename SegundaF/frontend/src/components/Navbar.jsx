@@ -10,9 +10,9 @@ export function Navbar() {
     ]
 
     const opcionesAdminR = [
-        { text: 'Arbol B', link: '/admin/report' },
-        { text: 'Grafo', link: '/admin/report' },
-        { text: 'Merkle', link: '/admin/report' },
+        { text: 'Arbol B', link: '/admin/report/ArbolB' },
+        { text: 'Grafo', link: '/admin/report/Grafo' },
+        { text: 'Merkle', link: '/admin/report/Merkle' },
     ]
 
     return (

@@ -3,8 +3,25 @@ import { ContainerMain } from '../components/ContainerMain'
 import Uploader from '../components/uploader'
 import axios from 'axios';
 import { API_URL } from "../config";
+import { Toaster, toast } from 'sonner';
+import { useEffect, useState } from "react";
+import '../scroll.css'
 
 function LoadStudents() {
+    const [userData, setUserData] = useState([]);
+
+    const getUsers = async () => {
+        try {
+            const resp = await axios.get(`${API_URL}/estudiantes`);
+            // console.log(resp)
+            setUserData(resp.data.data);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    useEffect(() => {
+        getUsers();
+    }, [])
 
     const handleUploadStudents = async (file) => {
         try {
@@ -15,11 +32,14 @@ function LoadStudents() {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            console.log(resp)
+            toast.success(`${resp.data.message}`, { duration: 2000 })
+            getUsers();
+
         } catch (e) {
-            console.log(e)
+            toast.error(`${e.data.error}`, { duration: 2000 })
         }
     }
+
 
     return (
         <div className='flex h-screen bg-bg-dark'>
@@ -32,59 +52,41 @@ function LoadStudents() {
                     </div>
                     <div className='flex flex-col w-2/3 bg-panel-dark py-4 px-6  rounded-lg'>
                         <h2 className='text-white font-bold text-lg'>Lista de Estudiantes</h2>
-                        <div className='flex w-full px-5 mt-5 text-white'>
-                            <table className='w-full'>
-                                <thead>
-                                    <tr>
-                                        <th>Columna 1</th>
-                                        <th>Columna 2</th>
-                                        <th>Columna 3</th>
-                                        <th>Columna 4</th>
-                                        <th>Columna 5</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Fila 1, Celda 1</td>
-                                        <td>Fila 1, Celda 2</td>
-                                        <td>Fila 1, Celda 3</td>
-                                        <td>Fila 1, Celda 4</td>
-                                        <td>Fila 1, Celda 5</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Fila 2, Celda 1</td>
-                                        <td>Fila 2, Celda 2</td>
-                                        <td>Fila 2, Celda 3</td>
-                                        <td>Fila 2, Celda 4</td>
-                                        <td>Fila 2, Celda 5</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Fila 3, Celda 1</td>
-                                        <td>Fila 3, Celda 2</td>
-                                        <td>Fila 3, Celda 3</td>
-                                        <td>Fila 3, Celda 4</td>
-                                        <td>Fila 3, Celda 5</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Fila 4, Celda 1</td>
-                                        <td>Fila 4, Celda 2</td>
-                                        <td>Fila 4, Celda 3</td>
-                                        <td>Fila 4, Celda 4</td>
-                                        <td>Fila 4, Celda 5</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Fila 5, Celda 1</td>
-                                        <td>Fila 5, Celda 2</td>
-                                        <td>Fila 5, Celda 3</td>
-                                        <td>Fila 5, Celda 4</td>
-                                        <td>Fila 5, Celda 5</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div className='flex w-full px-5 mt-5 text-white justify-center'>
+                            {
+                                userData === null || userData.length === 0 ? <h2 className='text-white font-bold text-center'>No hay estudiantes registrados</h2> :
+                                    (
+                                        <table className='w-full'>
+                                            <thead>
+                                                <tr>
+                                                    <th>Indice</th>
+                                                    <th>Carnet</th>
+                                                    <th>Nombre</th>
+                                                    <th>Password</th>
+                                                    <th>Cursos</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className=''>
+                                                {userData.map((user, index) => {
+                                                    return (
+                                                        <tr className='' key={index}>
+                                                            <td className='py-6'>{user.indice}</td>
+                                                            <td>{user.carnet}</td>
+                                                            <td>{user.nombre}</td>
+                                                            <td className='max-w-80 overflow-x-auto'><span className=''>{user.password}</span></td>
+                                                            <td className='px-6'>{user.cursos}</td>
+                                                        </tr>
+                                                    );
+                                                })}
+                                            </tbody>
+                                        </table>
+                                    )
+                            }
                         </div>
                     </div>
                 </div>
             </ContainerMain>
+            <Toaster position="top-center" richColors theme="dark" />
         </div>
     )
 }
