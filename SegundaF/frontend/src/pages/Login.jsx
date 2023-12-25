@@ -3,31 +3,37 @@ import { FaCircleUser } from "react-icons/fa6";
 import { FaKey } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa6";
 import { useForm } from 'react-hook-form'
-import { loginRequest } from '../api/auth'
 import { Toaster, toast } from 'sonner';
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from "../context/authContext";
+import { useEffect } from "react";
 
 function Login() {
     const { register, handleSubmit, formState: { errors } } = useForm()
     const navigate = useNavigate()
+    const { signin, errors: loginErrors, mode } = useAuth();
 
-    const signin = async (user) => {
-        console.log(user)
-        try {
-            const res = await loginRequest(user)
-            console.log(res)
-            if (res.data.mode === 'admin') navigate("/admin/index")
-            else if (res.data.mode === 'user') navigate("/student/courses")
-            else if (res.data.mode === 'tutor') navigate("/tutor/books")
-        } catch (error) {
-            toast.error(`${error.response.data.message}`, { duration: 2000 })
-        }
-    }
 
     const onSubmit = handleSubmit(data => {
-        console.log(data)
         signin(data)
     })
+
+    useEffect(() => {
+        if (loginErrors) {
+            toast.error(`${loginErrors}`, { duration: 2000 })
+        }
+    },)
+
+
+    useEffect(() => {
+        if (mode === 'admin') {
+            navigate("/admin/index")
+        } else if (mode === 'tutor') {
+            navigate("/tutor/books")
+        } else if (mode === 'user') {
+            navigate("/student/courses")
+        }
+    }, [mode]);
 
     return (
         <div className='flex h-screen items-center justify-center bg-bg-dark'>
