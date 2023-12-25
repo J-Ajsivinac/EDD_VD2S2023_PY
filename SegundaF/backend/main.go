@@ -1,6 +1,7 @@
 package main
 
 import (
+	"backend/pkg/arbol"
 	"backend/pkg/tabla"
 	"backend/schemas"
 	"fmt"
@@ -12,6 +13,7 @@ import (
 )
 
 var tablaHash = tabla.TablaHash{Tabla: make(map[int]tabla.NodoHash), Capacidad: 7, Utilizacion: 0}
+var arbolB *arbol.ArbolB = &arbol.ArbolB{Raiz: nil, Orden: 3}
 
 func Login(c *fiber.Ctx) error {
 	var login schemas.Login
@@ -55,22 +57,38 @@ func Login(c *fiber.Ctx) error {
 }
 
 func cargarEstudiantes(c *fiber.Ctx) error {
-	// Obtén el archivo del formulario enviado en la solicitud
 	file, err := c.FormFile("file")
 	if err != nil {
 		return err
 	}
 
-	// Crea un lector para el archivo
 	fileReader, err := file.Open()
 	if err != nil {
 		return err
 	}
 	defer fileReader.Close()
 
-	// Llama a la función LeerCSV con el lector del archivo
 	tablaHash.LeerCSVFromReader(fileReader)
 
+	return c.JSON(fiber.Map{
+		"message": "Archivo cargado exitosamente",
+	})
+}
+
+func cargarTutores(c *fiber.Ctx) error {
+	file, err := c.FormFile("file")
+	if err != nil {
+		return err
+	}
+
+	fileReader, err := file.Open()
+	if err != nil {
+		return err
+	}
+	defer fileReader.Close()
+
+	// tablaHash.LeerCSVFromReader(fileReader)
+	arbolB.LeerCSV(fileReader)
 	return c.JSON(fiber.Map{
 		"message": "Archivo cargado exitosamente",
 	})
@@ -108,8 +126,46 @@ func obtenerEstudiantes(c *fiber.Ctx) error {
 		"message": "Estudiantes obtenidos exitosamente",
 	}
 
-	// Enviar la respuesta JSON
 	return c.JSON(response)
+}
+
+func AgregarB(c *fiber.Ctx) error {
+	var nuevo schemas.AgregarArbol
+	err := c.BodyParser(&nuevo)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "Bad Request",
+		})
+	}
+	arbolB.Insertar(nuevo.Carnet, nuevo.Nombre, nuevo.Curso, nuevo.Password)
+	return c.JSON(fiber.Map{
+		"message": "Estudiante agregado exitosamente",
+	})
+}
+
+func GraficarB(c *fiber.Ctx) error {
+	arbolB.Graficar("arbolB")
+	return c.JSON(&fiber.Map{
+		"status":  200,
+		"message": "Grafica Generada",
+	})
+}
+
+func BuscarB(c *fiber.Ctx) error {
+	type buscar struct {
+		Carnet int `json:"carnet"`
+	}
+	var nuevo buscar
+	err := c.BodyParser(&nuevo)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "Bad Request",
+		})
+	}
+	arbolB.Buscar(nuevo.Carnet)
+	return c.JSON(fiber.Map{
+		"message": "Estudiante encontrado",
+	})
 }
 
 func main() {
@@ -121,5 +177,8 @@ func main() {
 	app.Post("/upload", cargarEstudiantes)
 	app.Get("/imprimir", imprimir)
 	app.Get("/estudiantes", obtenerEstudiantes)
+	app.Get("/graficarB", GraficarB)
+	app.Post("/buscarB", BuscarB)
+	app.Post("/agregarB", cargarTutores)
 	app.Listen(":3000")
 }
