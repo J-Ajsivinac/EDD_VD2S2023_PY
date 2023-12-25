@@ -5,6 +5,7 @@ import (
 	"backend/schemas"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -40,7 +41,7 @@ func Login(c *fiber.Ctx) error {
 			})
 		} else {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-				"error": "Credenciales Incorectas",
+				"message": "Credenciales Incorectas",
 			})
 		}
 	} else {
@@ -84,6 +85,33 @@ func imprimir(c *fiber.Ctx) error {
 	return nil
 }
 
+func obtenerEstudiantes(c *fiber.Ctx) error {
+	var estudiantes []schemas.UserData
+
+	if tablaHash.Utilizacion == 0 {
+		return c.Status(200).JSON(fiber.Map{
+			"data":    nil,
+			"message": "No hay estudiantes registrados",
+		})
+	}
+
+	for i := 0; i < tablaHash.Capacidad; i++ {
+		if nodo, existe := tablaHash.Tabla[i]; existe {
+			cursosStr := strings.Join(nodo.Persona.Cursos[:], " - ")
+			userD := schemas.UserData{Indice: nodo.Llave, Carnet: nodo.Persona.Carnet, Nombre: nodo.Persona.Nombre, Password: nodo.Persona.Password, Cursos: cursosStr}
+			estudiantes = append(estudiantes, userD)
+		}
+
+	}
+	response := fiber.Map{
+		"data":    estudiantes,
+		"message": "Estudiantes obtenidos exitosamente",
+	}
+
+	// Enviar la respuesta JSON
+	return c.JSON(response)
+}
+
 func main() {
 	fmt.Println("Hello World")
 
@@ -92,6 +120,6 @@ func main() {
 	app.Post("/login", Login)
 	app.Post("/upload", cargarEstudiantes)
 	app.Get("/imprimir", imprimir)
-
+	app.Get("/estudiantes", obtenerEstudiantes)
 	app.Listen(":3000")
 }

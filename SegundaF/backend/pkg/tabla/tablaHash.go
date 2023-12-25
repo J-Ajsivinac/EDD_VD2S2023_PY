@@ -90,7 +90,7 @@ func (t *TablaHash) nuevoIndice(nuevoIndice int) int {
 	return nuevoPosicion
 }
 
-func (t *TablaHash) Insertar(carnet int, nombre string, password [32]byte, cursos [3]string) {
+func (t *TablaHash) Insertar(carnet int, nombre string, password string, cursos [3]string) {
 	indice := t.calculoIndice(carnet)
 	nuevoNodo := &NodoHash{Llave: indice, Persona: &Persona{Carnet: carnet, Nombre: nombre, Password: password, Cursos: cursos}}
 	if indice < t.Capacidad {
@@ -118,18 +118,19 @@ func (t *TablaHash) Insertar(carnet int, nombre string, password [32]byte, curso
 	}
 }
 
-func encriptarPassword(password string) [32]byte {
+func encriptarPassword(password string) string {
 	texto := password
 	hash := sha256.Sum256([]byte(texto))
-
-	return hash
+	hashString := fmt.Sprintf("%x", hash)
+	return hashString
 }
 
 func (t *TablaHash) BuscarUsuario(carnet int, password string) (*Persona, bool) {
 	indice := t.calculoIndice(carnet)
 	inputHash := sha256.Sum256([]byte(password))
+	inputHashString := fmt.Sprintf("%x", inputHash)
 	if usuario, existe := t.Tabla[indice]; existe {
-		if usuario.Persona.Carnet == carnet && inputHash == usuario.Persona.Password {
+		if usuario.Persona.Carnet == carnet && inputHashString == usuario.Persona.Password {
 			return usuario.Persona, true
 		} else {
 			// Realizar búsqueda con sondaje cuadrático en caso de colisión
@@ -137,7 +138,7 @@ func (t *TablaHash) BuscarUsuario(carnet int, password string) (*Persona, bool) 
 			indice = t.reCalculoIndice(carnet, contador)
 			for {
 				if usuario, existe := t.Tabla[indice]; existe {
-					if usuario.Persona.Carnet == carnet && inputHash == usuario.Persona.Password {
+					if usuario.Persona.Carnet == carnet && inputHashString == usuario.Persona.Password {
 						return usuario.Persona, true
 					} else {
 						contador++

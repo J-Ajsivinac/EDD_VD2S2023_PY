@@ -3,7 +3,7 @@ package tabla
 type Persona struct {
 	Carnet   int
 	Nombre   string
-	Password [32]byte
+	Password string
 	Cursos   [3]string
 }
 
