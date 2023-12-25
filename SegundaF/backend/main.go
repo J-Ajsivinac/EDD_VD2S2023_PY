@@ -23,8 +23,12 @@ func Login(c *fiber.Ctx) error {
 	if login.Carnet == "admin" && login.Contrasena == "admin" {
 		return c.JSON(fiber.Map{
 			"message": "Login success",
+			"carnet":  "ADMIN_202200135",
+			"nombre":  "admin",
+			"mode":    "admin",
 		})
-	} else {
+	}
+	if !login.Estutor {
 		carnet, _ := strconv.Atoi(login.Carnet)
 		user, resp := tablaHash.BuscarUsuario(carnet, login.Contrasena)
 		if resp {
@@ -32,13 +36,20 @@ func Login(c *fiber.Ctx) error {
 				"message": "Login success",
 				"carnet":  user.Carnet,
 				"nombre":  user.Nombre,
+				"mode":    "user",
 			})
 		} else {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"error": "Credenciales Incorectas",
 			})
 		}
-
+	} else {
+		return c.JSON(fiber.Map{
+			"message": "Login success",
+			"carnet":  "---",
+			"nombre":  "Tutor",
+			"mode":    "tutor",
+		})
 	}
 }
 
@@ -59,7 +70,9 @@ func cargarEstudiantes(c *fiber.Ctx) error {
 	// Llama a la función LeerCSV con el lector del archivo
 	tablaHash.LeerCSVFromReader(fileReader)
 
-	return nil
+	return c.JSON(fiber.Map{
+		"message": "Archivo cargado exitosamente",
+	})
 }
 
 func imprimir(c *fiber.Ctx) error {
