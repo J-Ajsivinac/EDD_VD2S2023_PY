@@ -1,6 +1,15 @@
 import { Navbar } from '../components/Navbar'
 import { ContainerMain } from '../components/ContainerMain'
+import { useAuth } from "../context/authContext";
+import { useEffect } from 'react';
 function LandingAdmin() {
+
+    const { mode } = useAuth();
+
+    useEffect(() => {
+        console.log(mode)
+    })
+
     return (
         <div className='flex h-screen bg-bg-dark'>
             <Navbar></Navbar>

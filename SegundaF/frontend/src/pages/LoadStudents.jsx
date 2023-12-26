@@ -48,7 +48,7 @@ function LoadStudents() {
                 <div className='flex w-full h-full mt-3 items-center flex-col gap-4 '>
                     <div className='flex items-start justify-center w-2/3 py-4 px-6 rounded-lg flex-col gap-4 text-white bg-panel-dark'>
                         <h2 className='font-bold text-xl'>Cargar Estudiantes</h2>
-                        <Uploader height={"30"} onUpload={handleUploadStudents} />
+                        <Uploader height={"30"} onUpload={handleUploadStudents} extension=".csv" />
                     </div>
                     <div className='flex flex-col w-2/3 bg-panel-dark py-4 px-6  rounded-lg'>
                         <h2 className='text-white font-bold text-lg'>Lista de Estudiantes</h2>

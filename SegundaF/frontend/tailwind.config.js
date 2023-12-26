@@ -16,6 +16,10 @@ export default {
         'text-gray-1':'#9ea2ab',
         'btn-primary':'#6577f4',
         'btn-primary-hover':'#5666D1',
+        'btn-green':'#3cdc97',
+        'btn-green-hover':'#32B87E',
+        'btn-red':'#ed3a46',
+        'btn-red-hover':'#A1272F'
       }
     },
   },

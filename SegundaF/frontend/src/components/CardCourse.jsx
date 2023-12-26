@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 import { RiBook2Fill } from "react-icons/ri";
+import Tag from './Tag';
 function CardCourse({ code, name }) {
     return (
-        <div className="flex basis-[46%] flex-row bg-panel-dark p-6 items-center gap-4 rounded-md">
-            <RiBook2Fill size={36} color='#8c82f7' />
+        <div className="flex basis-[46%] flex-row bg-panel-dark p-6 items-center gap-5 rounded-md">
+            <RiBook2Fill size={38} color='#8c82f7' />
             <div className='flex flex-col gap-2 w-full '>
-                <span className='px-3 py-1 border rounded-md w-fit'>{code}</span>
-                <span>{name}</span>
+                <Tag number={code} />
+                <span className='text-lg font-semibold'>{name}</span>
             </div>
         </div>
     )

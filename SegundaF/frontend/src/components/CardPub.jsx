@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import Tag from './Tag';
 
 export function CardPub({ code, name, content }) {
     return (
@@ -6,8 +7,8 @@ export function CardPub({ code, name, content }) {
             <div className="flex w-full flex-row items-center gap-4 justify-between">
                 <div className='flex flex-row gap-4 items-center'>
                     <div className='flex flex-row gap-2 items-center'>
-                        <span className='px-3 py-1 border rounded-md'>{code}</span>
-                        <span className='font-normal'>{name}</span>
+                        <Tag number={code} />
+                        <span className='text-lg font-semibold'>{name}</span>
                     </div>
                 </div>
 

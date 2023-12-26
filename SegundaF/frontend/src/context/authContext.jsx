@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { loginRequest } from "../api/auth";
 
 
@@ -20,13 +20,22 @@ export const AuthProvider = ({ children }) => {
             const res = await loginRequest(user)
             // console.log(res)
             setMode(res.data.mode)
+            localStorage.setItem('mode', res.data.mode);
         } catch (error) {
             // toast.error(`${error.response.data.message}`, { duration: 2000 })
             setErrors(error.response.data.message)
         }
     }
 
+    useEffect(() => {
+        const storedMode = localStorage.getItem('mode');
+        if (storedMode) {
+            setMode(storedMode);
+        }
+    }, [])
+
     const logout = () => {
+        localStorage.removeItem('mode');
         setMode(null)
     }
 

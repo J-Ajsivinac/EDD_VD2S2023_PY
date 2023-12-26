@@ -2,7 +2,7 @@ import { LuUploadCloud, LuTrash2, LuFileText } from "react-icons/lu";
 import { useState } from "react";
 import PropTypes from 'prop-types';
 
-function Uploader({ height, onUpload }) {
+function Uploader({ height, onUpload, extension }) {
     const [fileName, setFileName] = useState('No se ha seleccionado un archivo')
     const h = {
         "60": "h-[240px]",
@@ -30,9 +30,9 @@ function Uploader({ height, onUpload }) {
     return (
         <div className="w-full">
             <form onSubmit={handleSubmit} action="" className="w-ful" >
-                <div className={`flex flex-col  border-2 border-dashed border-[#485773] ${h[height]} cursor-pointer rounded-lg hover:border-[#418cff] transition-transform hover:transition-all ease-in-out duration-150`}
+                <div className={`flex flex-col  border-2 border-dashed border-[#485773] ${h[height]} cursor-pointer rounded-lg hover:border-[#418cff] hover:bg-blue-800/10 transition-transform hover:transition-all ease-in-out duration-150`}
                     onClick={() => document.querySelector('.input-f').click()}>
-                    <input type="file" accept=".csv" className="input-f" hidden
+                    <input type="file" accept={extension} className="input-f" hidden
                         onChange={({ target: { files } }) => {
                             files[0] && setFileName(files[0].name)
                         }} />
@@ -67,5 +67,6 @@ export default Uploader
 
 Uploader.propTypes = {
     height: PropTypes.node,
+    extension: PropTypes.node,
     onUpload: PropTypes.func
 };

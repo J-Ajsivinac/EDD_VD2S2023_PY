@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { LuSchool, LuBookOpenCheck, LuLogOut, LuFile, LuClipboard } from "react-icons/lu";
+import { LuSchool, LuBookOpenCheck, LuBookOpen, LuLogOut, LuFile, LuClipboard, LuLayoutTemplate, LuMessageSquare } from "react-icons/lu";
 import PropTypes from 'prop-types';
 import Modal from './Modal'
 import { useAuth } from "../context/authContext";
@@ -9,7 +9,7 @@ export function Navbar() {
 
     const opcionesAdminC = [
         { text: 'Cursos', link: '/admin/load/courses' },
-        { text: 'Tutores', link: '/admin/load/courses' },
+        { text: 'Tutores', link: '/admin/load/tutor' },
         { text: 'Estudiantes', link: '/admin/load/students' },
     ]
 
@@ -38,24 +38,24 @@ export function Navbar() {
             <ul className="relative flex gap-x-3 items-center text-[#d6d6d6] font-semibold">
                 {mode === 'admin' ? (
                     <>
-                        <Modal opciones={opcionesAdminC} name="Cursos" position={66} Icon={LuFile} />
+                        <Modal opciones={opcionesAdminC} name="Cargar" position={66} Icon={LuFile} />
                         <Link to="/admin/accept" className='flex flex-row items-center gap-2 px-4 py-3 hover:bg-alt-dark rounded-lg hover:text-white cursor-pointer'><LuBookOpenCheck size={20} />Libros</Link>
                         <Modal opciones={opcionesAdminR} name="Reportes" position={15} Icon={LuClipboard} />
                         <Link to="/" onClick={() => logout()} className='flex flex-row items-center gap-2 px-3 py-3 hover:bg-alt-dark rounded-lg hover:text-white cursor-pointer'><LuLogOut size={20} /></Link>
                     </>
                 ) : mode === 'tutor' ? (
                     <>
-                        <Link to="/admin/accept" className='flex flex-row items-center gap-2 px-4 py-3 hover:bg-alt-dark rounded-lg hover:text-white cursor-pointer'><LuBookOpenCheck size={20} />Libros</Link>
-                        <Link to="/admin/accept" className='flex flex-row items-center gap-2 px-4 py-3 hover:bg-alt-dark rounded-lg hover:text-white cursor-pointer'><LuBookOpenCheck size={20} />Contenido</Link>
+                        <Link to="/tutor/books" className='flex flex-row items-center gap-2 px-4 py-3 hover:bg-alt-dark rounded-lg hover:text-white cursor-pointer'><LuBookOpen size={20} />Libros</Link>
+                        <Link to="/tutor/pubs" className='flex flex-row items-center gap-2 px-4 py-3 hover:bg-alt-dark rounded-lg hover:text-white cursor-pointer'><LuMessageSquare size={20} />Contenido</Link>
                         <Link to="/" onClick={() => logout()} className='flex flex-row items-center gap-2 px-3 py-3 hover:bg-alt-dark rounded-lg hover:text-white cursor-pointer'><LuLogOut size={20} /></Link>
 
                     </>
 
                 ) : mode === 'user' ? (
                     <>
-                        <Link to="/admin/accept" className='flex flex-row items-center gap-2 px-4 py-3 hover:bg-alt-dark rounded-lg hover:text-white cursor-pointer'><LuBookOpenCheck size={20} />Cursos</Link>
-                        <Link to="/admin/accept" className='flex flex-row items-center gap-2 px-4 py-3 hover:bg-alt-dark rounded-lg hover:text-white cursor-pointer'><LuBookOpenCheck size={20} />Libros</Link>
-                        <Link to="/admin/accept" className='flex flex-row items-center gap-2 px-4 py-3 hover:bg-alt-dark rounded-lg hover:text-white cursor-pointer'><LuBookOpenCheck size={20} />Contenido</Link>
+                        <Link to="/student/courses" className='flex flex-row items-center gap-2 px-4 py-3 hover:bg-alt-dark rounded-lg hover:text-white cursor-pointer'><LuLayoutTemplate size={20} />Cursos</Link>
+                        <Link to="/student/books" className='flex flex-row items-center gap-2 px-4 py-3 hover:bg-alt-dark rounded-lg hover:text-white cursor-pointer'><LuBookOpen size={20} />Libros</Link>
+                        <Link to="/student/pubs" className='flex flex-row items-center gap-2 px-4 py-3 hover:bg-alt-dark rounded-lg hover:text-white cursor-pointer'><LuMessageSquare size={20} />Contenido</Link>
                         <Link to="/" onClick={() => logout()} className='flex flex-row items-center gap-2 px-3 py-3 hover:bg-alt-dark rounded-lg hover:text-white cursor-pointer'><LuLogOut size={20} /></Link>
 
                     </>

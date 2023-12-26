@@ -10,7 +10,7 @@ function Report() {
             <Navbar></Navbar>
             <ContainerMain>
                 <div className='flex w-full h-full mt-4 items-center flex-col '>
-                    <div className='flex gap-5 flex-col w-2/3 bg-panel-dark px-5 py-6'>
+                    <div className='flex gap-5 flex-col w-2/3 bg-panel-dark px-5 py-6 rounded-md'>
                         <div className='flex justify-between w-full bg-panel-dark items-center'>
                             <h2 className='text-white font-bold text-lg'>Reporte</h2>
                             <div className='flex gap-3 text-white items-center'>
@@ -19,7 +19,7 @@ function Report() {
                             </div>
 
                         </div>
-                        <div className='w-full h-96 bg-sub-dark'>
+                        <div className='w-full h-96 bg-sub-dark rounded-md'>
                         </div>
                         <button className='text-white'>Descargar</button>
                     </div>

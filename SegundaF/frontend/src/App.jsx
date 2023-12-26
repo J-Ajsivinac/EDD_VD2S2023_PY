@@ -12,6 +12,8 @@ import StudentBooks from './pages/StudentBooks'
 import Courses from './pages/Courses'
 import Pubs from './pages/Pubs'
 import { AuthProvider } from './context/authContext'
+import LoadTutor from './pages/LoadTutor'
+import CreatePub from './pages/CreatePub'
 
 function App() {
 
@@ -25,10 +27,12 @@ function App() {
             <Route path="/admin/index" element={<LandingAdmin />} />
             <Route path="/admin/load/courses" element={<LoadCourses />} />
             <Route path="/admin/load/students" element={<LoadStudents />} />
+            <Route path="/admin/load/tutor" element={<LoadTutor />} />
             <Route path="/admin/accept" element={<AcceptBooks />} />
             <Route path="/admin/report/:graph" element={<Report />} />
             {/* Tutor */}
             <Route path="/tutor/books" element={<TutorBooks />} />
+            <Route path="/tutor/pubs" element={<CreatePub />} />
             {/* Estudiante */}
             <Route path="/student/pubs" element={<Pubs />} />
             <Route path="/student/courses" element={<Courses />} />
