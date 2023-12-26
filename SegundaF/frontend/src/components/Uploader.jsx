@@ -1,4 +1,4 @@
-import { LuUploadCloud, LuTrash2, LuFileText } from "react-icons/lu";
+import { LuUploadCloud, LuTrash2, LuFileText, LuFileCheck2 } from "react-icons/lu";
 import { useState } from "react";
 import PropTypes from 'prop-types';
 
@@ -44,14 +44,16 @@ function Uploader({ height, onUpload, extension }) {
 
                 <div className="w-full mt-3">
                     <section className="w-full flex justify-between items-center px-4 py-3 rounded-md bg-sub-dark">
-                        <LuFileText size={25} color="#9ea2ab" />
-                        <span className="flex items-center gap-3">
+                        {
+                            fileName === 'No se ha seleccionado un archivo' ? <LuFileText size={22} color="#9ea2ab" /> :
+                                <LuFileCheck2 size={22} color="#4ef59d" />
+                        }
+                        <span className="flex items-center gap-3 font-semibold">
                             {fileName}
-                            <LuTrash2 size={20} color="#f54e5d"
-                                className="cursor-pointer"
-                                onMouseDown={() => {
-                                    restart()
-                                }} />
+                            {
+                                fileName === 'No se ha seleccionado un archivo' ? <LuTrash2 size={22} color="#9ea2ab" onClick={restart} /> :
+                                    <LuTrash2 size={22} color="#ff4d4d" onClick={restart} />
+                            }
                         </span>
                     </section>
                 </div>
