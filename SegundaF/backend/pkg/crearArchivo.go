@@ -8,7 +8,7 @@ import (
 
 func CrearArchivo(nombre_archivo string) {
 	var _, err = os.Stat(nombre_archivo)
-
+	fmt.Println("Creando archivo", nombre_archivo)
 	if os.IsNotExist(err) {
 		var file, err = os.Create(nombre_archivo)
 		if err != nil {

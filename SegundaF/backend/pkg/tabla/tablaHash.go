@@ -17,10 +17,14 @@ type TablaHash struct {
 func (t *TablaHash) calculoIndice(carnet int) int {
 	var numeros []int //2017 -> [2 0 1 7]
 	// Convertir el numero en array
-	if carnet > 0 {
-		digito := carnet % 10
-		numeros = append([]int{digito}, numeros...)
-		carnet = carnet / 10
+	for {
+		if carnet > 0 {
+			digito := carnet % 10
+			numeros = append([]int{digito}, numeros...)
+			carnet = carnet / 10
+		} else {
+			break
+		}
 	}
 
 	//Convertir array de numeros en Codigo ascii

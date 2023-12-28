@@ -2,6 +2,7 @@ package main
 
 import (
 	"backend/pkg/arbol"
+	"backend/pkg/grafoA"
 	"backend/pkg/tabla"
 	"backend/schemas"
 	"fmt"
@@ -14,6 +15,7 @@ import (
 
 var tablaHash = tabla.TablaHash{Tabla: make(map[int]tabla.NodoHash), Capacidad: 7, Utilizacion: 0}
 var arbolB *arbol.ArbolB = &arbol.ArbolB{Raiz: nil, Orden: 3}
+var grafo *grafoA.Grafo = &grafoA.Grafo{Principal: nil}
 
 func Login(c *fiber.Ctx) error {
 	var login schemas.Login
@@ -89,6 +91,35 @@ func cargarTutores(c *fiber.Ctx) error {
 
 	// tablaHash.LeerCSVFromReader(fileReader)
 	arbolB.LeerCSV(fileReader)
+	return c.JSON(fiber.Map{
+		"message": "Archivo cargado exitosamente",
+	})
+}
+
+func cargarCursos(c *fiber.Ctx) error {
+	file, err := c.FormFile("file")
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": err,
+		})
+	}
+
+	fileReader, err := file.Open()
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": err,
+		})
+	}
+	defer fileReader.Close()
+
+	//  = grafo.Lectura(fileReader)
+	value, resp := grafo.Lectura(fileReader)
+	if !value {
+		return c.Status(400).JSON(fiber.Map{
+			"message": resp,
+		})
+	}
+	grafo.Reporte()
 	return c.JSON(fiber.Map{
 		"message": "Archivo cargado exitosamente",
 	})
@@ -180,5 +211,7 @@ func main() {
 	app.Get("/graficarB", GraficarB)
 	app.Post("/buscarB", BuscarB)
 	app.Post("/agregarB", cargarTutores)
+	app.Post("/cargarCursos", cargarCursos)
+
 	app.Listen(":3000")
 }
