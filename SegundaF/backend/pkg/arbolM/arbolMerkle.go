@@ -48,9 +48,6 @@ func (a *ArbolMerkle) GenerarArbol() {
 	for i := a.CantidadBloques; i < int(math.Pow(2, float64(nivel))); i++ {
 		a.AgregarBloque(strconv.Itoa(i), "nulo", 0)
 	}
-	/*
-		♫ -> ☼ -> ☼ -> ☼ -> ☼ -> nulo -> nulo -> nulo
-	*/
 	a.generarHash()
 }
 
@@ -98,8 +95,8 @@ func (a *ArbolMerkle) encriptarSha3(cadena string) string {
 /*******************************************/
 func (a *ArbolMerkle) Graficar() {
 	cadena := ""
-	nombre_archivo := "./arbolMerkle.dot"
-	nombre_imagen := "arbolMerkle.jpg"
+	nombre_archivo := "./reportes/libros.dot"
+	nombre_imagen := "./reportes/libros.jpg"
 	if a.RaizMerkle != nil {
 		cadena += "digraph arbol { node [shape=box];"
 		cadena += a.retornarValoresArbol(a.RaizMerkle, 0)

@@ -1,0 +1,13 @@
+digraph arbol { node [shape=box];"99759ba0367cae7dcc5c" [dir=back];
+"99759ba0367cae7dcc5c" -> "5a2ca57712d381ad8427" [dir=back];
+"5a2ca57712d381ad8427" -> "29-12-2023::22:47:40
+Aceptado
+Libro 1
+202200001" [dir=back];
+ "99759ba0367cae7dcc5c" -> "dc435132692afb510b13" [dir=back];
+"dc435132692afb510b13" -> "29-12-2023::22:47:42
+1
+nulo
+0" [dir=back];
+ {rank=same"5a2ca57712d381ad8427" -> "dc435132692afb510b13" [style=invis]}; 
+}

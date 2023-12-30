@@ -2,12 +2,13 @@ package main
 
 import (
 	"backend/pkg/arbol"
+	"backend/pkg/arbolM"
 	"backend/pkg/grafoA"
 	"backend/pkg/tabla"
 	"backend/schemas"
-	"fmt"
+	"crypto/sha256"
+	"encoding/hex"
 	"strconv"
-	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -16,6 +17,7 @@ import (
 var tablaHash = tabla.TablaHash{Tabla: make(map[int]tabla.NodoHash), Capacidad: 7, Utilizacion: 0}
 var arbolB *arbol.ArbolB = &arbol.ArbolB{Raiz: nil, Orden: 3}
 var grafo *grafoA.Grafo = &grafoA.Grafo{Principal: nil}
+var arbolMerkle *arbolM.ArbolMerkle = &arbolM.ArbolMerkle{RaizMerkle: nil, BloqueDeDatos: nil, CantidadBloques: 0}
 
 func Login(c *fiber.Ctx) error {
 	var login schemas.Login
@@ -33,8 +35,8 @@ func Login(c *fiber.Ctx) error {
 			"mode":    "admin",
 		})
 	}
+	carnet, _ := strconv.Atoi(login.Carnet)
 	if !login.Estutor {
-		carnet, _ := strconv.Atoi(login.Carnet)
 		user, resp := tablaHash.BuscarUsuario(carnet, login.Contrasena)
 		if resp {
 			return c.JSON(fiber.Map{
@@ -49,13 +51,33 @@ func Login(c *fiber.Ctx) error {
 			})
 		}
 	} else {
-		return c.JSON(fiber.Map{
-			"message": "Login success",
-			"carnet":  "---",
-			"nombre":  "Tutor",
-			"mode":    "tutor",
-		})
+		resp := arbolB.Buscar(carnet)
+		if resp != nil {
+			if resp.Password == encriptarPassword(login.Contrasena) {
+				return c.JSON(fiber.Map{
+					"message": "Login success",
+					"carnet":  resp.Carnet,
+					"nombre":  resp.Nombre,
+					"mode":    "tutor",
+				})
+			} else {
+				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+					"message": "Credenciales Incorectas",
+				})
+			}
+		}
 	}
+	return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+		"message": "Credenciales Incorectas",
+	})
+}
+
+func encriptarPassword(password string) string {
+	hexaString := ""
+	h := sha256.New()
+	h.Write([]byte(password))
+	hexaString = hex.EncodeToString(h.Sum(nil))
+	return hexaString
 }
 
 func cargarEstudiantes(c *fiber.Ctx) error {
@@ -89,7 +111,6 @@ func cargarTutores(c *fiber.Ctx) error {
 	}
 	defer fileReader.Close()
 
-	// tablaHash.LeerCSVFromReader(fileReader)
 	arbolB.LeerCSV(fileReader)
 	return c.JSON(fiber.Map{
 		"message": "Archivo cargado exitosamente",
@@ -112,7 +133,6 @@ func cargarCursos(c *fiber.Ctx) error {
 	}
 	defer fileReader.Close()
 
-	//  = grafo.Lectura(fileReader)
 	value, resp := grafo.Lectura(fileReader)
 	if !value {
 		return c.Status(400).JSON(fiber.Map{
@@ -123,15 +143,6 @@ func cargarCursos(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"message": "Archivo cargado exitosamente",
 	})
-}
-
-func imprimir(c *fiber.Ctx) error {
-	for i := 0; i < tablaHash.Capacidad; i++ {
-		if usuario, existe := tablaHash.Tabla[i]; existe {
-			fmt.Println("Posicion: ", i, " Carnet: ", usuario.Persona.Carnet, "Password: ", usuario.Persona.Password)
-		}
-	}
-	return nil
 }
 
 func obtenerEstudiantes(c *fiber.Ctx) error {
@@ -146,8 +157,7 @@ func obtenerEstudiantes(c *fiber.Ctx) error {
 
 	for i := 0; i < tablaHash.Capacidad; i++ {
 		if nodo, existe := tablaHash.Tabla[i]; existe {
-			cursosStr := strings.Join(nodo.Persona.Cursos[:], " - ")
-			userD := schemas.UserData{Indice: nodo.Llave, Carnet: nodo.Persona.Carnet, Nombre: nodo.Persona.Nombre, Password: nodo.Persona.Password, Cursos: cursosStr}
+			userD := schemas.UserData{Indice: nodo.Llave, Carnet: nodo.Persona.Carnet, Nombre: nodo.Persona.Nombre, Password: nodo.Persona.Password, Cursos: nodo.Persona.Cursos[:]}
 			estudiantes = append(estudiantes, userD)
 		}
 
@@ -160,22 +170,8 @@ func obtenerEstudiantes(c *fiber.Ctx) error {
 	return c.JSON(response)
 }
 
-func AgregarB(c *fiber.Ctx) error {
-	var nuevo schemas.AgregarArbol
-	err := c.BodyParser(&nuevo)
-	if err != nil {
-		return c.Status(400).JSON(fiber.Map{
-			"message": "Bad Request",
-		})
-	}
-	arbolB.Insertar(nuevo.Carnet, nuevo.Nombre, nuevo.Curso, nuevo.Password)
-	return c.JSON(fiber.Map{
-		"message": "Estudiante agregado exitosamente",
-	})
-}
-
 func GraficarB(c *fiber.Ctx) error {
-	arbolB.Graficar("arbolB")
+	arbolB.Graficar()
 	return c.JSON(&fiber.Map{
 		"status":  200,
 		"message": "Grafica Generada",
@@ -199,19 +195,60 @@ func BuscarB(c *fiber.Ctx) error {
 	})
 }
 
-func main() {
-	fmt.Println("Hello World")
+func AceptarL(c *fiber.Ctx) error {
+	var nuevo schemas.AceptarLibros
+	err := c.BodyParser(&nuevo)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "Bad Request",
+		})
+	}
+	arbolMerkle.AgregarBloque(nuevo.Estado, nuevo.Nombre, nuevo.Carnet)
+	return c.JSON(fiber.Map{
+		"message": "Bloque agregado exitosamente",
+	})
+}
 
+func GraficarM(c *fiber.Ctx) error {
+	arbolMerkle.GenerarArbol()
+	arbolMerkle.Graficar()
+	return c.JSON(&fiber.Map{
+		"status":  200,
+		"message": "Grafica Generada",
+	})
+}
+
+func AgregarL(c *fiber.Ctx) error {
+	var nuevo schemas.AgregarLibro
+	err := c.BodyParser(&nuevo)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "Bad Request",
+		})
+	}
+	arbolB.GuardarLibro(arbolB.Raiz.Primero, nuevo.Nombre, nuevo.Contenido, nuevo.Carnet)
+	return c.JSON(fiber.Map{
+		"message": "Libro agregado exitosamente",
+	})
+}
+
+func main() {
 	app := fiber.New()
 	app.Use(cors.New())
 	app.Post("/login", Login)
-	app.Post("/upload", cargarEstudiantes)
-	app.Get("/imprimir", imprimir)
-	app.Get("/estudiantes", obtenerEstudiantes)
-	app.Get("/graficarB", GraficarB)
-	app.Post("/buscarB", BuscarB)
-	app.Post("/agregarB", cargarTutores)
-	app.Post("/cargarCursos", cargarCursos)
-
+	//Administrador
+	admin := app.Group("/admin")
+	admin.Post("/cargar-e", cargarEstudiantes)
+	admin.Get("/obtener-e", obtenerEstudiantes)
+	admin.Post("/cargar-t", cargarTutores)
+	admin.Post("/cargar-c", cargarCursos)
+	admin.Get("/graficar-arbolB", GraficarB)
+	admin.Post("/buscar-arbolB", BuscarB)
+	admin.Post("/aceptar-arbolM", AceptarL)
+	admin.Get("/graficar-arbolM", GraficarM)
+	//Tutor
+	tutor := app.Group("/tutor")
+	tutor.Post("/agregar-arbolB", AgregarL)
+	//Estudiante
 	app.Listen(":3000")
 }
