@@ -3,6 +3,7 @@ package tabla
 import (
 	"crypto/sha256"
 	"encoding/csv"
+	"encoding/hex"
 	"fmt"
 	"io"
 	"strconv"
@@ -123,16 +124,16 @@ func (t *TablaHash) Insertar(carnet int, nombre string, password string, cursos 
 }
 
 func encriptarPassword(password string) string {
-	texto := password
-	hash := sha256.Sum256([]byte(texto))
-	hashString := fmt.Sprintf("%x", hash)
-	return hashString
+	hexaString := ""
+	h := sha256.New()
+	h.Write([]byte(password))
+	hexaString = hex.EncodeToString(h.Sum(nil))
+	return hexaString
 }
 
 func (t *TablaHash) BuscarUsuario(carnet int, password string) (*Persona, bool) {
 	indice := t.calculoIndice(carnet)
-	inputHash := sha256.Sum256([]byte(password))
-	inputHashString := fmt.Sprintf("%x", inputHash)
+	inputHashString := encriptarPassword(password)
 	if usuario, existe := t.Tabla[indice]; existe {
 		if usuario.Persona.Carnet == carnet && inputHashString == usuario.Persona.Password {
 			return usuario.Persona, true

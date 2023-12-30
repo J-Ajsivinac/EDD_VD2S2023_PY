@@ -1,17 +1,18 @@
 package arbol
 
 type Libro struct {
+	Nombre    string
 	Contenido string
-	Estado    string
+	Estado    int
 }
 
 type Usuario struct {
-	Carnet      int
-	Nombre      string
-	Curso       string
-	Password    string
-	Libros      []*Libro
-	Publicacion []string
+	Carnet        int
+	Nombre        string
+	Curso         string
+	Password      string
+	Libros        []*Libro
+	Publicaciones []string
 }
 
 type NodoB struct {

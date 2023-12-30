@@ -2,7 +2,9 @@ package arbol
 
 import (
 	"backend/pkg"
+	"crypto/sha256"
 	"encoding/csv"
+	"encoding/hex"
 	"fmt"
 	"io"
 	"strconv"
@@ -90,7 +92,7 @@ func (a *ArbolB) dividir(rama *RamaB) *NodoB {
 }
 
 func (a *ArbolB) Insertar(carnet int, nombre string, curso string, password string) { //15
-	nuevoNodo := &NodoB{Usuario: &Usuario{Carnet: carnet, Nombre: nombre, Curso: curso, Password: password}}
+	nuevoNodo := &NodoB{Usuario: &Usuario{Carnet: carnet, Nombre: nombre, Curso: curso, Password: encriptarPassword(password)}}
 	if a.Raiz == nil {
 		a.Raiz = &RamaB{Primero: nil, Hoja: true, Contador: 0}
 		a.Raiz.Insertar(nuevoNodo)
@@ -104,10 +106,10 @@ func (a *ArbolB) Insertar(carnet int, nombre string, curso string, password stri
 	}
 }
 
-func (a *ArbolB) Graficar(nombre string) {
+func (a *ArbolB) Graficar() {
 	cadena := ""
-	nombre_archivo := "./" + nombre + ".dot"
-	nombre_imagen := nombre + ".jpg"
+	nombre_archivo := "./reportes/tutores.jpg"
+	nombre_imagen := "./reportes/tutores.jpg"
 	if a.Raiz != nil {
 		cadena += "digraph arbol { \nnode[shape=record]\n"
 		cadena += a.grafo(a.Raiz.Primero)
@@ -191,12 +193,12 @@ func (a *ArbolB) conexionRamas(rama *NodoB) string {
 	return dot
 }
 
-func (a *ArbolB) Buscar(numero int) {
+func (a *ArbolB) Buscar(numero int) *Usuario {
 	buscarElemento := a.buscarArbol(a.Raiz.Primero, numero)
 	if buscarElemento != nil {
-		fmt.Println("Se encontro el elemento", buscarElemento)
+		return buscarElemento
 	} else {
-		fmt.Println("No se encontro")
+		return buscarElemento
 	}
 }
 
@@ -248,4 +250,56 @@ func (t *ArbolB) LeerCSV(reader io.Reader) {
 		valor, _ := strconv.Atoi(linea[0])
 		t.Insertar(valor, linea[1], linea[2], linea[3])
 	}
+}
+
+func (a *ArbolB) GuardarLibro(raiz *NodoB, nombre string, contenido string, carnet int) {
+	if raiz != nil {
+		aux := raiz
+		for aux != nil {
+			if aux.Izquierdo != nil {
+				a.GuardarLibro(aux.Izquierdo.Primero, nombre, contenido, carnet)
+			}
+			if aux.Usuario.Carnet == carnet {
+				raiz.Usuario.Libros = append(raiz.Usuario.Libros, &Libro{Nombre: nombre, Contenido: contenido, Estado: 1})
+				fmt.Println("Registre el libro")
+				return
+			}
+			if aux.Siguiente == nil {
+				if aux.Derecho != nil {
+					a.GuardarLibro(aux.Derecho.Primero, nombre, contenido, carnet)
+				}
+			}
+			aux = aux.Siguiente
+		}
+	}
+}
+
+func (a *ArbolB) GuardarPublicacion(raiz *NodoB, contenido string, carnet int) {
+	if raiz != nil {
+		aux := raiz
+		for aux != nil {
+			if aux.Izquierdo != nil {
+				a.GuardarPublicacion(aux.Izquierdo.Primero, contenido, carnet)
+			}
+			if aux.Usuario.Carnet == carnet {
+				raiz.Usuario.Publicaciones = append(raiz.Usuario.Publicaciones, contenido)
+				fmt.Println("Registre el libro")
+				return
+			}
+			if aux.Siguiente == nil {
+				if aux.Derecho != nil {
+					a.GuardarPublicacion(aux.Derecho.Primero, contenido, carnet)
+				}
+			}
+			aux = aux.Siguiente
+		}
+	}
+}
+
+func encriptarPassword(password string) string {
+	hexaString := ""
+	h := sha256.New()
+	h.Write([]byte(password))
+	hexaString = hex.EncodeToString(h.Sum(nil))
+	return hexaString
 }
