@@ -12,7 +12,7 @@ function LoadStudents() {
 
     const getUsers = async () => {
         try {
-            const resp = await axios.get(`${API_URL}/estudiantes`);
+            const resp = await axios.get(`${API_URL}/admin/obtener-e`);
             // console.log(resp)
             setUserData(resp.data.data);
         } catch (e) {
@@ -27,7 +27,7 @@ function LoadStudents() {
         try {
             const formData = new FormData();
             formData.append('file', file);
-            const resp = await axios.post(`${API_URL}/upload`, formData, {
+            const resp = await axios.post(`${API_URL}/admin/cargar-e`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

@@ -21,6 +21,7 @@ export const AuthProvider = ({ children }) => {
             // console.log(res)
             setMode(res.data.mode)
             localStorage.setItem('mode', res.data.mode);
+            localStorage.setItem('carnet', res.data.carnet);
         } catch (error) {
             // toast.error(`${error.response.data.message}`, { duration: 2000 })
             setErrors(error.response.data.message)
@@ -35,8 +36,9 @@ export const AuthProvider = ({ children }) => {
     }, [])
 
     const logout = () => {
-        localStorage.removeItem('mode');
         setMode(null)
+        localStorage.removeItem('mode');
+        localStorage.removeItem('carnet');
     }
 
     return (
