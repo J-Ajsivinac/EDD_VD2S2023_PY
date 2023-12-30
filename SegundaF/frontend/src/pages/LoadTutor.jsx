@@ -11,7 +11,7 @@ function LoadTutor() {
         try {
             const formData = new FormData();
             formData.append('file', file);
-            const resp = await axios.post(`${API_URL}/agregarB`, formData, {
+            const resp = await axios.post(`${API_URL}/admin/cargar-t`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

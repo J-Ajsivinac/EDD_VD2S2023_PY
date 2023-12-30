@@ -11,7 +11,7 @@ function LoadCourses() {
         try {
             const formData = new FormData();
             formData.append('file', file);
-            const resp = await axios.post(`${API_URL}/cargarCursos`, formData, {
+            const resp = await axios.post(`${API_URL}/admin/cargar-c`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
