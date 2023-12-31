@@ -18,9 +18,11 @@ var tablaHash = tabla.TablaHash{Tabla: make(map[int]tabla.NodoHash), Capacidad: 
 var arbolB *arbol.ArbolB = &arbol.ArbolB{Raiz: nil, Orden: 3}
 var grafo *grafoA.Grafo = &grafoA.Grafo{Principal: nil}
 var arbolMerkle *arbolM.ArbolMerkle = &arbolM.ArbolMerkle{RaizMerkle: nil, BloqueDeDatos: nil, CantidadBloques: 0}
+var listaSimple *arbol.ListaSimple
 
 func Login(c *fiber.Ctx) error {
 	var login schemas.Login
+	listaSimple = &arbol.ListaSimple{Inicio: nil, Longitud: 0}
 	err := c.BodyParser(&login)
 	if err != nil {
 		return c.Status(400).JSON(fiber.Map{
@@ -51,13 +53,13 @@ func Login(c *fiber.Ctx) error {
 			})
 		}
 	} else {
-		resp := arbolB.Buscar(carnet)
-		if resp != nil {
-			if resp.Password == encriptarPassword(login.Contrasena) {
+		arbolB.Buscar(carnet, listaSimple)
+		if listaSimple.Longitud > 0 {
+			if listaSimple.Inicio.Tutor.Usuario.Password == encriptarPassword(login.Contrasena) {
 				return c.JSON(fiber.Map{
 					"message": "Login success",
-					"carnet":  resp.Carnet,
-					"nombre":  resp.Nombre,
+					"carnet":  listaSimple.Inicio.Tutor.Usuario.Carnet,
+					"nombre":  listaSimple.Inicio.Tutor.Usuario.Nombre,
 					"mode":    "tutor",
 				})
 			} else {
@@ -139,7 +141,6 @@ func cargarCursos(c *fiber.Ctx) error {
 			"message": resp,
 		})
 	}
-	grafo.Reporte()
 	return c.JSON(fiber.Map{
 		"message": "Archivo cargado exitosamente",
 	})
@@ -170,31 +171,6 @@ func obtenerEstudiantes(c *fiber.Ctx) error {
 	return c.JSON(response)
 }
 
-func GraficarB(c *fiber.Ctx) error {
-	arbolB.Graficar()
-	return c.JSON(&fiber.Map{
-		"status":  200,
-		"message": "Grafica Generada",
-	})
-}
-
-func BuscarB(c *fiber.Ctx) error {
-	type buscar struct {
-		Carnet int `json:"carnet"`
-	}
-	var nuevo buscar
-	err := c.BodyParser(&nuevo)
-	if err != nil {
-		return c.Status(400).JSON(fiber.Map{
-			"message": "Bad Request",
-		})
-	}
-	arbolB.Buscar(nuevo.Carnet)
-	return c.JSON(fiber.Map{
-		"message": "Estudiante encontrado",
-	})
-}
-
 func AceptarL(c *fiber.Ctx) error {
 	var nuevo schemas.AceptarLibros
 	err := c.BodyParser(&nuevo)
@@ -209,13 +185,53 @@ func AceptarL(c *fiber.Ctx) error {
 	})
 }
 
-func GraficarM(c *fiber.Ctx) error {
-	arbolMerkle.GenerarArbol()
-	arbolMerkle.Graficar()
-	return c.JSON(&fiber.Map{
-		"status":  200,
-		"message": "Grafica Generada",
-	})
+func GenerarGraficas(c *fiber.Ctx) error {
+	var grafica schemas.GraphR
+	err := c.BodyParser(&grafica)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "Se esperaba un JSON",
+		})
+	}
+	if grafica.Grafica == "ArbolB" {
+		img := arbolB.Graficar()
+		if len(img) == 0 {
+			return c.Status(400).JSON(fiber.Map{
+				"message": "No se pudo generar la grafica",
+			})
+		}
+		return c.JSON(fiber.Map{
+			"message": "Grafica Generada",
+			"graph":   img,
+		})
+	} else if grafica.Grafica == "Merkle" {
+		arbolMerkle.GenerarArbol()
+		img := arbolMerkle.Graficar()
+		if len(img) == 0 {
+			return c.Status(400).JSON(fiber.Map{
+				"message": "No se pudo generar la grafica",
+			})
+		}
+		return c.JSON(fiber.Map{
+			"message": "Grafica Generada",
+			"graph":   img,
+		})
+	} else if grafica.Grafica == "Grafo" {
+		img := grafo.Graficar()
+		if len(img) == 0 {
+			return c.Status(400).JSON(fiber.Map{
+				"message": "No se pudo generar la grafica",
+			})
+		}
+		return c.JSON(fiber.Map{
+			"message": "Grafica Generada",
+			"graph":   img,
+		})
+	} else {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "No se encontro la grafica",
+		})
+	}
 }
 
 func AgregarL(c *fiber.Ctx) error {
@@ -232,23 +248,104 @@ func AgregarL(c *fiber.Ctx) error {
 	})
 }
 
+func obtenerLibrosTutor(c *fiber.Ctx) error {
+	type buscar struct {
+		Carnet int `json:"carnet"`
+	}
+	listaSimple = &arbol.ListaSimple{Inicio: nil, Longitud: 0}
+	var nuevo buscar
+	err := c.BodyParser(&nuevo)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "Bad Request",
+		})
+	}
+	arbolB.Buscar(nuevo.Carnet, listaSimple)
+	if listaSimple.Longitud == 0 {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "No se encontro el tutor",
+		})
+	}
+	return c.JSON(fiber.Map{
+		"message": "Libros obtenidos exitosamente",
+		"libros":  listaSimple.Inicio.Tutor.Usuario.Libros,
+	})
+}
+
+func agregarContenido(c *fiber.Ctx) error {
+	var nuevo schemas.ContenidoPub
+	err := c.BodyParser(&nuevo)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "Bad Request",
+		})
+	}
+	arbolB.GuardarPublicacion(arbolB.Raiz.Primero, nuevo.Contenido, nuevo.Carnet)
+	return c.JSON(fiber.Map{
+		"message": "Publicacion agregada exitosamente",
+	})
+}
+
+func obtenerPublicaciones(c *fiber.Ctx) error {
+	type buscar struct {
+		Carnet int `json:"carnet"`
+	}
+	listaSimple = &arbol.ListaSimple{Inicio: nil, Longitud: 0}
+	var nuevo buscar
+	err := c.BodyParser(&nuevo)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "Bad Request",
+		})
+	}
+	arbolB.Buscar(nuevo.Carnet, listaSimple)
+	if listaSimple.Longitud == 0 {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "No se encontro el tutor",
+		})
+	}
+	return c.JSON(fiber.Map{
+		"message":       "Libros obtenidos exitosamente",
+		"publicaciones": listaSimple.Inicio.Tutor.Usuario.Publicaciones,
+	})
+}
+
+func obtenerTLibros(c *fiber.Ctx) error {
+	listaSimple = &arbol.ListaSimple{Inicio: nil, Longitud: 0}
+	arbolB.ObtenerLibros(arbolB.Raiz.Primero, listaSimple)
+	if listaSimple.Longitud == 0 {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "No se encontro el tutor",
+		})
+	}
+	usuarios := listaSimple.ConverirUsuarios()
+	return c.JSON(fiber.Map{
+		"message": "Libros obtenidos exitosamente",
+		"data":    usuarios,
+	})
+}
+
 func main() {
 	app := fiber.New()
 	app.Use(cors.New())
+	app.Static("/reportes", "./reportes")
 	app.Post("/login", Login)
+	app.Get("/obtener-tlibros", obtenerTLibros)
 	//Administrador
 	admin := app.Group("/admin")
 	admin.Post("/cargar-e", cargarEstudiantes)
 	admin.Get("/obtener-e", obtenerEstudiantes)
 	admin.Post("/cargar-t", cargarTutores)
 	admin.Post("/cargar-c", cargarCursos)
-	admin.Get("/graficar-arbolB", GraficarB)
-	admin.Post("/buscar-arbolB", BuscarB)
 	admin.Post("/aceptar-arbolM", AceptarL)
-	admin.Get("/graficar-arbolM", GraficarM)
+	admin.Post("/graficar", GenerarGraficas)
 	//Tutor
 	tutor := app.Group("/tutor")
 	tutor.Post("/agregar-arbolB", AgregarL)
+	tutor.Post("/obtener-libros", obtenerLibrosTutor)
+	tutor.Post("/agregar-contenido", agregarContenido)
+	tutor.Post("/obtener-publicaciones", obtenerPublicaciones)
+
 	//Estudiante
 	app.Listen(":3000")
 }

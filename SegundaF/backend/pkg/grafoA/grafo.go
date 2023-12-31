@@ -73,7 +73,12 @@ func (g *Grafo) InsertarValores(curso string, post string) {
 	}
 }
 
-func (g *Grafo) Reporte() {
+func (g *Grafo) Graficar() string {
+
+	if g.Principal == nil {
+		return ""
+	}
+
 	cadena := ""
 	nombre_archivo := "./reportes/cursos.dot"
 	nombre_imagen := "./reportes/cursos.jpg"
@@ -86,6 +91,9 @@ func (g *Grafo) Reporte() {
 	pkg.CrearArchivo(nombre_archivo)
 	pkg.EscribirArchivo(cadena, nombre_archivo)
 	pkg.Ejecutar(nombre_imagen, nombre_archivo)
+
+	return nombre_imagen
+
 }
 
 func (g *Grafo) retornarValoresMatriz() string {

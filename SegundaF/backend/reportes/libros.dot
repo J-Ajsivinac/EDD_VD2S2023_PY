@@ -1,13 +1,13 @@
-digraph arbol { node [shape=box];"99759ba0367cae7dcc5c" [dir=back];
-"99759ba0367cae7dcc5c" -> "5a2ca57712d381ad8427" [dir=back];
-"5a2ca57712d381ad8427" -> "29-12-2023::22:47:40
-Aceptado
-Libro 1
-202200001" [dir=back];
- "99759ba0367cae7dcc5c" -> "dc435132692afb510b13" [dir=back];
-"dc435132692afb510b13" -> "29-12-2023::22:47:42
+digraph arbol { node [shape=box];"908bbad688b104e1cb0e" [dir=back];
+"908bbad688b104e1cb0e" -> "dc12fca6e019c15ba7c3" [dir=back];
+"dc12fca6e019c15ba7c3" -> "30-12-2023::19:07:46
+0
+nulo
+0" [dir=back];
+ "908bbad688b104e1cb0e" -> "199ac82ced8fe50d31e8" [dir=back];
+"199ac82ced8fe50d31e8" -> "30-12-2023::19:07:46
 1
 nulo
 0" [dir=back];
- {rank=same"5a2ca57712d381ad8427" -> "dc435132692afb510b13" [style=invis]}; 
+ {rank=same"dc12fca6e019c15ba7c3" -> "199ac82ced8fe50d31e8" [style=invis]}; 
 }

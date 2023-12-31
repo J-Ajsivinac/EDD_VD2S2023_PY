@@ -93,7 +93,12 @@ func (a *ArbolMerkle) encriptarSha3(cadena string) string {
 }
 
 /*******************************************/
-func (a *ArbolMerkle) Graficar() {
+func (a *ArbolMerkle) Graficar() string {
+
+	if a.RaizMerkle == nil {
+		return ""
+	}
+
 	cadena := ""
 	nombre_archivo := "./reportes/libros.dot"
 	nombre_imagen := "./reportes/libros.jpg"
@@ -105,6 +110,9 @@ func (a *ArbolMerkle) Graficar() {
 	pkg.CrearArchivo(nombre_archivo)
 	pkg.EscribirArchivo(cadena, nombre_archivo)
 	pkg.Ejecutar(nombre_imagen, nombre_archivo)
+
+	return nombre_imagen
+
 }
 
 func (a *ArbolMerkle) retornarValoresArbol(raiz *NodoMerkle, indice int) string {

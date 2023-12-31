@@ -106,9 +106,13 @@ func (a *ArbolB) Insertar(carnet int, nombre string, curso string, password stri
 	}
 }
 
-func (a *ArbolB) Graficar() {
+func (a *ArbolB) Graficar() string {
+	if a.Raiz == nil {
+		return ""
+	}
+
 	cadena := ""
-	nombre_archivo := "./reportes/tutores.jpg"
+	nombre_archivo := "./reportes/tutores.dot"
 	nombre_imagen := "./reportes/tutores.jpg"
 	if a.Raiz != nil {
 		cadena += "digraph arbol { \nnode[shape=record]\n"
@@ -119,6 +123,8 @@ func (a *ArbolB) Graficar() {
 	pkg.CrearArchivo(nombre_archivo)
 	pkg.EscribirArchivo(cadena, nombre_archivo)
 	pkg.Ejecutar(nombre_imagen, nombre_archivo)
+
+	return "/reportes/tutores.jpg"
 
 }
 
@@ -193,40 +199,55 @@ func (a *ArbolB) conexionRamas(rama *NodoB) string {
 	return dot
 }
 
-func (a *ArbolB) Buscar(numero int) *Usuario {
-	buscarElemento := a.buscarArbol(a.Raiz.Primero, numero)
-	if buscarElemento != nil {
-		return buscarElemento
-	} else {
-		return buscarElemento
+func (a *ArbolB) Buscar(numero int, listaSimple *ListaSimple) {
+	if a.Raiz == nil {
+		return
 	}
+	a.buscarArbol(a.Raiz.Primero, numero, listaSimple)
+
 }
 
-func (a *ArbolB) buscarArbol(raiz *NodoB, numero int) *Usuario {
+func (a *ArbolB) buscarArbol(raiz *NodoB, numero int, listaSimple *ListaSimple) {
 	if raiz != nil {
 		aux := raiz
 		for aux != nil {
 			if aux.Izquierdo != nil {
-				usuarioEncontrado := a.buscarArbol(aux.Izquierdo.Primero, numero)
-				if usuarioEncontrado != nil {
-					return usuarioEncontrado
-				}
+				a.buscarArbol(aux.Izquierdo.Primero, numero, listaSimple)
 			}
-			if aux.Usuario != nil && aux.Usuario.Carnet == numero {
-				return aux.Usuario
+			if aux.Usuario.Carnet == numero {
+				listaSimple.Insertar(aux)
 			}
 			if aux.Siguiente == nil {
 				if aux.Derecho != nil {
-					usuarioEncontrado := a.buscarArbol(aux.Derecho.Primero, numero)
-					if usuarioEncontrado != nil {
-						return usuarioEncontrado
-					}
+					a.buscarArbol(aux.Derecho.Primero, numero, listaSimple)
 				}
 			}
 			aux = aux.Siguiente
 		}
 	}
-	return nil
+}
+
+func (a *ArbolB) ObtenerLibros(raiz *NodoB, listaSimple *ListaSimple) {
+	if raiz != nil {
+		aux := raiz
+		for aux != nil {
+			if aux.Izquierdo != nil {
+				a.ObtenerLibros(aux.Izquierdo.Primero, listaSimple)
+			}
+			//listaSimple.Insertar(aux)
+			fmt.Print(aux.Usuario.Carnet, " ", aux.Usuario.Libros)
+			if aux.Usuario.Libros != nil {
+				listaSimple.Insertar(aux)
+			}
+
+			if aux.Siguiente == nil {
+				if aux.Derecho != nil {
+					a.ObtenerLibros(aux.Derecho.Primero, listaSimple)
+				}
+			}
+			aux = aux.Siguiente
+		}
+	}
 }
 
 func (t *ArbolB) LeerCSV(reader io.Reader) {
@@ -260,8 +281,8 @@ func (a *ArbolB) GuardarLibro(raiz *NodoB, nombre string, contenido string, carn
 				a.GuardarLibro(aux.Izquierdo.Primero, nombre, contenido, carnet)
 			}
 			if aux.Usuario.Carnet == carnet {
-				raiz.Usuario.Libros = append(raiz.Usuario.Libros, &Libro{Nombre: nombre, Contenido: contenido, Estado: 1})
-				fmt.Println("Registre el libro")
+				raiz.Usuario.Libros = append(raiz.Usuario.Libros, &Libro{Nombre: nombre, Contenido: contenido, Estado: "Pendiente"})
+				// fmt.Println("Registre el libro")
 				return
 			}
 			if aux.Siguiente == nil {
@@ -283,7 +304,7 @@ func (a *ArbolB) GuardarPublicacion(raiz *NodoB, contenido string, carnet int) {
 			}
 			if aux.Usuario.Carnet == carnet {
 				raiz.Usuario.Publicaciones = append(raiz.Usuario.Publicaciones, contenido)
-				fmt.Println("Registre el libro")
+				// fmt.Println("Registre el libro")
 				return
 			}
 			if aux.Siguiente == nil {

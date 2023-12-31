@@ -11,3 +11,8 @@ type AgregarLibro struct {
 	Contenido string `json:"contenido"`
 	Nombre    string `json:"nombre"`
 }
+
+type ContenidoPub struct {
+	Contenido string `json:"contenido"`
+	Carnet    int    `json:"carnet"`
+}

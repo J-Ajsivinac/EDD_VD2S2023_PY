@@ -3,7 +3,7 @@ package arbol
 type Libro struct {
 	Nombre    string
 	Contenido string
-	Estado    int
+	Estado    string
 }
 
 type Usuario struct {
