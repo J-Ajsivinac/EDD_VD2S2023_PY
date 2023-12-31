@@ -1,9 +1,41 @@
 import { Navbar } from '../components/Navbar'
 import { ContainerMain } from '../components/ContainerMain'
 import { useParams } from 'react-router-dom'
+import { graphRequest } from "../api/peticiones";
+import { useEffect, useState } from "react";
 
 function Report() {
     const { graph } = useParams()
+    const [imagen, setImagen] = useState('')
+
+    var titulo;
+    if (graph === 'ArbolB') {
+        titulo = 'Árbol B'
+    } else if (graph === 'Grafo') {
+        titulo = 'Grafo'
+    } else if (graph === 'Merkle') {
+        titulo = 'Árbol de Merkle'
+    }
+
+    useEffect(() => {
+        const gReport = async () => {
+            const peticion = {
+                grafica: graph
+            }
+            console.log(JSON.stringify(peticion))
+            try {
+                const res = await graphRequest(peticion)
+                console.log(res)
+                // setImagen(res.data.data)
+                // const url = URL.createObjectURL(res.data.graph)
+                setImagen("http://localhost:3000/" + res.data.graph)
+            } catch (error) {
+                console.log(error)
+                setImagen("")
+            }
+        }
+        gReport();
+    }, [graph])
 
     return (
         <div className='flex h-screen bg-bg-dark'>
@@ -15,12 +47,11 @@ function Report() {
                             <h2 className='text-white font-bold text-lg'>Reporte</h2>
                             <div className='flex gap-3 text-white items-center'>
                                 <span className='font-medium'>Tipo</span>
-                                <span className='px-4 bg-alt-dark py-2 rounded-lg'>{graph}</span>
+                                <span className='px-4 bg-alt-dark py-2 rounded-lg'>{titulo}</span>
                             </div>
 
                         </div>
-                        <div className='w-full h-96 bg-sub-dark rounded-md'>
-                        </div>
+                        <img src={imagen} alt="Reporte de Alumnos" />
                         <button className='text-white'>Descargar</button>
                     </div>
                 </div>

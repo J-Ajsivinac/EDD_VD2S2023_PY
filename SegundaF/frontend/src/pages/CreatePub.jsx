@@ -2,18 +2,33 @@ import { Navbar } from '../components/Navbar'
 import { ContainerMain } from '../components/ContainerMain'
 import { useForm } from 'react-hook-form'
 import { LuUser2 } from "react-icons/lu";
+import { addPubsRequest } from '../api/peticiones';
 
 function CreatePub() {
-    const { register, formState: { errors } } = useForm()
+    const { register, handleSubmit, formState: { errors } } = useForm()
+
+    const agregarPubs = async (data) => {
+        try {
+            const res = await addPubsRequest(data)
+            console.log(res)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const onSubmit = handleSubmit(data => {
+        data.carnet = parseInt(localStorage.getItem('carnet'))
+        agregarPubs(data)
+    })
+
     return (
         <div className='flex h-screen bg-bg-dark'>
-            <Navbar></Navbar>
+            <Navbar />
             <ContainerMain>
                 <div className='flex w-full h-full items-center justify-center gap-5 flex-col '>
-                    <form className='w-2/3 flex flex-col bg-panel-dark py-4 text-white rounded-md px-4  gap-4'>
+                    <form onSubmit={onSubmit} className='w-2/3 flex flex-col bg-panel-dark py-4 text-white rounded-md px-4  gap-4'>
                         <h2 className='font-bold text-xl'>Crear Publicación</h2>
                         <div className='flex w-full flex-row items-center gap-4'>
-                            {/* <UserIcon userName={user.nombre} className="w-fit"></UserIcon> */}
                             <div className='p-3 bg-sub-dark rounded-full'>
                                 <LuUser2 size={25} />
                             </div>

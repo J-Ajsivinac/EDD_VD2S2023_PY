@@ -23,7 +23,6 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem('mode', res.data.mode);
             localStorage.setItem('carnet', res.data.carnet);
         } catch (error) {
-            // toast.error(`${error.response.data.message}`, { duration: 2000 })
             setErrors(error.response.data.message)
         }
     }

@@ -2,7 +2,7 @@ import { LuUploadCloud, LuTrash2, LuFileText, LuFileCheck2 } from "react-icons/l
 import { useState } from "react";
 import PropTypes from 'prop-types';
 
-function Uploader({ height, onUpload, extension }) {
+function Uploader({ height, onUpload, extension, iscontent = false }) {
     const [fileName, setFileName] = useState('No se ha seleccionado un archivo')
     const h = {
         "60": "h-[240px]",
@@ -18,6 +18,28 @@ function Uploader({ height, onUpload, extension }) {
         }
     }
 
+    const handleSubmit2 = (e) => {
+        e.preventDefault();
+        const file = e.target[0].files[0];
+        const reader = new FileReader();
+        console.log(file)
+        reader.onloadend = async (e) => {
+            const text = (e.target.result);
+            const data = {
+                carnet: parseInt(localStorage.getItem('carnet')),
+                nombre: file.name,
+                contenido: text
+            }
+            onUpload(data);
+            restart();
+        };
+        reader.onerror = (error) => {
+            console.error("Error al leer el archivo:", error);
+        };
+
+        reader.readAsDataURL(file);
+    }
+
     const restart = () => {
         setFileName('No se ha seleccionado un archivo')
         const inputFile = document.querySelector('.input-f');
@@ -29,7 +51,8 @@ function Uploader({ height, onUpload, extension }) {
 
     return (
         <div className="w-full">
-            <form onSubmit={handleSubmit} action="" className="w-ful" >
+
+            <form onSubmit={!iscontent ? handleSubmit : handleSubmit2} action="" className="w-ful" >
                 <div className={`flex flex-col  border-2 border-dashed border-[#485773] ${h[height]} cursor-pointer rounded-lg hover:border-[#418cff] hover:bg-blue-800/10 transition-transform hover:transition-all ease-in-out duration-150`}
                     onClick={() => document.querySelector('.input-f').click()}>
                     <input type="file" accept={extension} className="input-f" hidden
@@ -70,5 +93,6 @@ export default Uploader
 Uploader.propTypes = {
     height: PropTypes.node,
     extension: PropTypes.node,
-    onUpload: PropTypes.func
+    onUpload: PropTypes.func,
+    iscontent: PropTypes.bool,
 };
