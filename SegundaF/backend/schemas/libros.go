@@ -16,3 +16,7 @@ type ContenidoPub struct {
 	Contenido string `json:"contenido"`
 	Carnet    int    `json:"carnet"`
 }
+
+type BuscarCurso struct {
+	Codigo []string `json:"codigo"`
+}

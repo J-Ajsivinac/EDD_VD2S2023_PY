@@ -8,6 +8,7 @@ import (
 	"backend/schemas"
 	"crypto/sha256"
 	"encoding/hex"
+	"fmt"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -39,8 +40,9 @@ func Login(c *fiber.Ctx) error {
 	}
 	carnet, _ := strconv.Atoi(login.Carnet)
 	if !login.Estutor {
-		user, resp := tablaHash.BuscarUsuario(carnet, login.Contrasena)
-		if resp {
+		user, resp := tablaHash.BuscarUsuario(carnet)
+		fmt.Println(user, resp)
+		if resp && user.Password == encriptarPassword(login.Contrasena) {
 			return c.JSON(fiber.Map{
 				"message": "Login success",
 				"carnet":  user.Carnet,
@@ -63,6 +65,8 @@ func Login(c *fiber.Ctx) error {
 					"mode":    "tutor",
 				})
 			} else {
+				fmt.Println(listaSimple.Inicio.Tutor.Usuario.Password, "encontrador")
+				fmt.Println(encriptarPassword(login.Contrasena), "encriptado")
 				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 					"message": "Credenciales Incorectas",
 				})
@@ -272,6 +276,21 @@ func obtenerLibrosTutor(c *fiber.Ctx) error {
 	})
 }
 
+func aceptarLibroAdmin(c *fiber.Ctx) error {
+	var nuevo schemas.AceptarLibros
+	err := c.BodyParser(&nuevo)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "Bad Request",
+		})
+	}
+	arbolB.CambiarEstadoLibro(arbolB.Raiz.Primero, nuevo.Carnet, nuevo.Nombre, nuevo.Estado)
+	return c.JSON(fiber.Map{
+		"message": "Libro" + nuevo.Estado + " exitosamente",
+	})
+
+}
+
 func agregarContenido(c *fiber.Ctx) error {
 	var nuevo schemas.ContenidoPub
 	err := c.BodyParser(&nuevo)
@@ -325,12 +344,93 @@ func obtenerTLibros(c *fiber.Ctx) error {
 	})
 }
 
+func validarCurso(c *fiber.Ctx) error {
+	var nuevo schemas.BuscarCurso
+	err := c.BodyParser(&nuevo)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "Bad Request",
+		})
+	}
+	notFound := false
+	for i := 0; i < len(nuevo.Codigo); i++ {
+		if !grafo.Buscar(nuevo.Codigo[i]) {
+			notFound = true
+		}
+	}
+	if !notFound {
+		return c.JSON(fiber.Map{
+			"message": "Cursos validados exitosamente",
+		})
+	} else {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "No se encontraron los cursos",
+		})
+	}
+}
+
+func buscarLibrosCurso(c *fiber.Ctx) error {
+	type buscar struct {
+		Codigo []string `json:"codigo"`
+	}
+	listaSimple = &arbol.ListaSimple{Inicio: nil, Longitud: 0}
+	var nuevo buscar
+	err := c.BodyParser(&nuevo)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "Bad Request",
+		})
+	}
+
+	for i := 0; i < len(nuevo.Codigo); i++ {
+		arbolB.LlamarBuscarLibros(nuevo.Codigo[i], listaSimple)
+	}
+
+	libros := listaSimple.ConverirUsuarios()
+
+	if listaSimple.Longitud == 0 {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "No se encontro el tutor",
+		})
+	}
+	return c.JSON(fiber.Map{
+		"message": "Libros obtenidos exitosamente",
+		"libros":  libros,
+	})
+}
+
+func buscarEstudiante(c *fiber.Ctx) error {
+	type buscar struct {
+		Carnet int `json:"carnet"`
+	}
+	listaSimple = &arbol.ListaSimple{Inicio: nil, Longitud: 0}
+	var nuevo buscar
+	err := c.BodyParser(&nuevo)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "Bad Request",
+		})
+	}
+	user, resp := tablaHash.BuscarUsuario(nuevo.Carnet)
+	if resp {
+		return c.JSON(fiber.Map{
+			"message": "Login success",
+			"cursos":  user.Cursos,
+		})
+	} else {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "No se encontro el usuario",
+		})
+	}
+}
+
 func main() {
 	app := fiber.New()
 	app.Use(cors.New())
 	app.Static("/reportes", "./reportes")
 	app.Post("/login", Login)
 	app.Get("/obtener-tlibros", obtenerTLibros)
+	app.Post("/validar-cursos", validarCurso)
 	//Administrador
 	admin := app.Group("/admin")
 	admin.Post("/cargar-e", cargarEstudiantes)
@@ -339,6 +439,7 @@ func main() {
 	admin.Post("/cargar-c", cargarCursos)
 	admin.Post("/aceptar-arbolM", AceptarL)
 	admin.Post("/graficar", GenerarGraficas)
+	admin.Post("/aceptar-libro", aceptarLibroAdmin)
 	//Tutor
 	tutor := app.Group("/tutor")
 	tutor.Post("/agregar-arbolB", AgregarL)
@@ -347,5 +448,8 @@ func main() {
 	tutor.Post("/obtener-publicaciones", obtenerPublicaciones)
 
 	//Estudiante
+	estudiante := app.Group("/estudiante")
+	estudiante.Post("/buscar-libros", buscarLibrosCurso)
+	estudiante.Post("/buscar-estudiante", buscarEstudiante)
 	app.Listen(":3000")
 }

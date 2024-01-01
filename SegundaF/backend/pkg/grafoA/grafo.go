@@ -136,7 +136,6 @@ func (g *Grafo) retornarValoresMatriz() string {
 func (matriz1 *Grafo) Lectura(reader io.Reader) (bool, string) {
 	data, err := io.ReadAll(reader)
 	if err != nil {
-		// log.Fatal("Error al leer el json: ", err)
 		return false, "Error al leer el json: " + err.Error()
 	}
 
@@ -155,4 +154,15 @@ func (matriz1 *Grafo) Lectura(reader io.Reader) (bool, string) {
 		}
 	}
 	return true, "Se ha cargado el archivo correctamente"
+}
+
+func (g *Grafo) Buscar(curso string) bool {
+	aux := g.Principal
+	for aux != nil {
+		if aux.Valor == curso {
+			return true
+		}
+		aux = aux.Abajo
+	}
+	return false
 }

@@ -11,17 +11,17 @@ func (r *RamaB) Insertar(nuevoNodo *NodoB) {
 		r.Primero = nuevoNodo
 		r.Contador++
 	} else {
-		if nuevoNodo.Usuario.Carnet < r.Primero.Usuario.Carnet { // 7 | 10
+		if nuevoNodo.Usuario.Curso < r.Primero.Usuario.Curso {
 			nuevoNodo.Siguiente = r.Primero
-			r.Primero.Izquierdo = nuevoNodo.Derecho //*********** Hice cambio -> nuevoNodo.Derecho = r.Primero.Izquierdo
+			r.Primero.Izquierdo = nuevoNodo.Derecho
 			r.Primero.Anterior = nuevoNodo
 			r.Primero = nuevoNodo
 			r.Contador++
-		} else if r.Primero.Siguiente != nil { // 7 | 9 | 10 -> 9
-			if r.Primero.Siguiente.Usuario.Carnet > nuevoNodo.Usuario.Carnet {
+		} else if r.Primero.Siguiente != nil {
+			if r.Primero.Siguiente.Usuario.Curso > nuevoNodo.Usuario.Curso {
 				nuevoNodo.Siguiente = r.Primero.Siguiente
 				nuevoNodo.Anterior = r.Primero
-				r.Primero.Siguiente.Izquierdo = nuevoNodo.Derecho //*********** Hice cambio
+				r.Primero.Siguiente.Izquierdo = nuevoNodo.Derecho
 				r.Primero.Derecho = nuevoNodo.Izquierdo
 				r.Primero.Siguiente.Anterior = nuevoNodo
 				r.Primero.Siguiente = nuevoNodo
@@ -29,7 +29,7 @@ func (r *RamaB) Insertar(nuevoNodo *NodoB) {
 			} else { // 7 | 10 -> 15
 				aux := r.Primero.Siguiente
 				nuevoNodo.Anterior = aux
-				aux.Derecho = nuevoNodo.Izquierdo //*********** Hice cambio
+				aux.Derecho = nuevoNodo.Izquierdo
 				aux.Siguiente = nuevoNodo
 				r.Contador++
 			}

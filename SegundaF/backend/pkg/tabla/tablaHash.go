@@ -131,11 +131,10 @@ func encriptarPassword(password string) string {
 	return hexaString
 }
 
-func (t *TablaHash) BuscarUsuario(carnet int, password string) (*Persona, bool) {
+func (t *TablaHash) BuscarUsuario(carnet int) (*Persona, bool) {
 	indice := t.calculoIndice(carnet)
-	inputHashString := encriptarPassword(password)
 	if usuario, existe := t.Tabla[indice]; existe {
-		if usuario.Persona.Carnet == carnet && inputHashString == usuario.Persona.Password {
+		if usuario.Persona.Carnet == carnet {
 			return usuario.Persona, true
 		} else {
 			// Realizar búsqueda con sondaje cuadrático en caso de colisión
@@ -143,7 +142,7 @@ func (t *TablaHash) BuscarUsuario(carnet int, password string) (*Persona, bool) 
 			indice = t.reCalculoIndice(carnet, contador)
 			for {
 				if usuario, existe := t.Tabla[indice]; existe {
-					if usuario.Persona.Carnet == carnet && inputHashString == usuario.Persona.Password {
+					if usuario.Persona.Carnet == carnet {
 						return usuario.Persona, true
 					} else {
 						contador++
@@ -177,9 +176,15 @@ func (t *TablaHash) LeerCSVFromReader(reader io.Reader) {
 		}
 		password := encriptarPassword(linea[2])
 		var cursos [3]string
-		cursos[0] = linea[3]
-		cursos[1] = linea[4]
-		cursos[2] = linea[5]
+		if linea[3] != "0" {
+			cursos[0] = linea[3]
+		}
+		if linea[4] != "0" {
+			cursos[1] = linea[4]
+		}
+		if linea[5] != "0" {
+			cursos[2] = linea[5]
+		}
 		valor, _ := strconv.Atoi(linea[0])
 		t.Insertar(valor, linea[1], password, cursos)
 	}

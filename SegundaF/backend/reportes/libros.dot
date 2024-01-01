@@ -1,13 +1,14 @@
-digraph arbol { node [shape=box];"908bbad688b104e1cb0e" [dir=back];
-"908bbad688b104e1cb0e" -> "dc12fca6e019c15ba7c3" [dir=back];
-"dc12fca6e019c15ba7c3" -> "30-12-2023::19:07:46
+digraph arbol { node [shape=box];"48b7ee9148494fc20f7c" [dir=back];
+"48b7ee9148494fc20f7c" -> "144e0a2e190913f3ebe9" [dir=back];
+"144e0a2e190913f3ebe9" -> "01-01-2024::12:05:40
 0
 nulo
 0" [dir=back];
- "908bbad688b104e1cb0e" -> "199ac82ced8fe50d31e8" [dir=back];
-"199ac82ced8fe50d31e8" -> "30-12-2023::19:07:46
+ "48b7ee9148494fc20f7c" -> "34e21230c2ac49d26b26" [dir=back];
+"34e21230c2ac49d26b26" -> "01-01-2024::12:05:40
 1
 nulo
 0" [dir=back];
- {rank=same"dc12fca6e019c15ba7c3" -> "199ac82ced8fe50d31e8" [style=invis]}; 
+ {rank=same"144e0a2e190913f3ebe9" -> "34e21230c2ac49d26b26" [style=invis]}; 
+}invis]}; 
 }
