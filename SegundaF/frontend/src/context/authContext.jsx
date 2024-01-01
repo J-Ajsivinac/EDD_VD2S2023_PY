@@ -34,6 +34,16 @@ export const AuthProvider = ({ children }) => {
         }
     }, [])
 
+    useEffect(() => {
+        if (errors != null) {
+            const timer = setTimeout(() => {
+                setErrors(null);
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [errors])
+
+
     const logout = () => {
         setMode(null)
         localStorage.removeItem('mode');

@@ -63,5 +63,5 @@ SelectInput.propTypes = {
     options: PropTypes.array.isRequired,
     placeHolder: PropTypes.node.isRequired,
     onSelectOption: PropTypes.func.isRequired,
-    value: PropTypes.node,
+    value: PropTypes.object,
 };

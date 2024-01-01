@@ -25,9 +25,12 @@ function Uploader({ height, onUpload, extension, iscontent = false }) {
         console.log(file)
         reader.onloadend = async (e) => {
             const text = (e.target.result);
+            const fileName = file.name;
+            const fileNameS = fileName.replace(/\.[^/.]+$/, "");
+
             const data = {
                 carnet: parseInt(localStorage.getItem('carnet')),
-                nombre: file.name,
+                nombre: fileNameS,
                 contenido: text
             }
             onUpload(data);
