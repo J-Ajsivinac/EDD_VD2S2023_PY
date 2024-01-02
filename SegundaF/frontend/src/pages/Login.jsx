@@ -44,7 +44,7 @@ function Login() {
                     <div className="flex flex-col">
                         <div className="relative">
                             <div className="absolute flex border border-transparent left-0 top-0 h-full w-12 p-2">
-                                <div className="flex items-center justify-center rounded-tl rounded-bl z-10 bg-sub-dark text-text-gray text-lg h-full w-full">
+                                <div className="flex items-center justify-center rounded-tl rounded-bl z-10  text-text-gray text-lg h-full w-full">
                                     <FaCircleUser size={20} />
                                 </div>
                             </div>
@@ -59,7 +59,7 @@ function Login() {
                     <div className="flex flex-col">
                         <div className="relative">
                             <div className="absolute flex border border-transparent left-0 top-0 h-full w-12 p-2">
-                                <div className="flex items-center justify-center rounded-tl rounded-bl z-10 bg-sub-dark text-text-gray text-lg h-full w-full">
+                                <div className="flex items-center justify-center rounded-tl rounded-bl z-10 text-text-gray text-lg h-full w-full">
                                     <FaKey size={20} />
                                 </div>
                             </div>
@@ -90,6 +90,9 @@ function Login() {
 
                     <button className='bg-btn-primary hover:bg-btn-primary-hover text-white font-bold py-2 px-2 rounded-md mt-2 transition-transform hover:transition-all ease-in-out duration-150'>Iniciar sesión</button>
                 </form>
+                <div className='w-full flex justify-center mt-2'>
+                    <p className='text-text-gray'>© 202200135</p>
+                </div>
             </Card>
             <Toaster position="top-center" richColors theme="dark" />
         </div>

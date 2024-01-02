@@ -18,14 +18,12 @@ function Pubs() {
         console.log(data)
         try {
             const res = await getBooksStudentsRequest(data)
-            console.log(res.data)
+            console.log('---.--', res.data)
             // setData(res.data)
             setLibrosU((prevLibrosU) => {
                 const nuevoLibrosU = { ...prevLibrosU };
                 res.data.libros.forEach((estudiante) => {
                     if (estudiante.Publicaciones != null) {
-
-
                         if (estudiante.Carnet in nuevoLibrosU) {
                             nuevoLibrosU[estudiante.Curso].push(estudiante.Publicaciones);
                         } else {
@@ -33,7 +31,7 @@ function Pubs() {
                         }
                     }
                 });
-                console.log("----", nuevoLibrosU[775]);
+                console.log("----", nuevoLibrosU);
                 return nuevoLibrosU;
             });
         } catch (error) {
@@ -46,7 +44,6 @@ function Pubs() {
             <ContainerMain>
                 <div className='flex w-full h-full mt-4 items-center gap-5 flex-col '>
                     <div className='flex flex-col items-start  w-2/3 rounded-lg gap-4 flex-wrap text-white '>
-                        {/* <CardPub code='123456' name='Introduccción....' content='Lorem ipsum dolor sit amet c' /> */}
                         {
                             Object.keys(librosU).map((Curso, i) => (
                                 <CardPub code={Curso} content={librosU[Curso][0]} key={i} />

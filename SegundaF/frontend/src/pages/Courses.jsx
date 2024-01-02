@@ -29,10 +29,15 @@ function Courses() {
             <ContainerMain>
                 <div className='flex w-full h-full mt-4 items-center gap-5 flex-col '>
                     <div className='flex flex-row  items-stretch  w-2/3 rounded-lg gap-4 flex-wrap text-white '>
+                        <h2 className='text-white text-xl font-bold'>Listado de Cursos</h2>
+                    </div>
+                    <div className='flex flex-row  items-stretch  w-2/3 rounded-lg gap-4 flex-wrap text-white '>
                         {
                             courses === null || courses.length === 0 ? <h2 className='text-white font-bold text-center'>No hay Cursos registrados</h2> :
                                 courses.map((course, index) => {
-                                    return <CardCourse code={course} key={index} />
+                                    if (course !== '') {
+                                        return <CardCourse code={course} key={index} />
+                                    }
                                 })
                         }
                     </div>

@@ -74,7 +74,11 @@ function LoadStudents() {
                                                             <td>{user.carnet}</td>
                                                             <td>{user.nombre}</td>
                                                             <td className='max-w-80 overflow-x-auto'><span className=''>{user.password}</span></td>
-                                                            <td className='px-6'>{user.cursos}</td>
+                                                            <td className='px-6'>{
+                                                                user.cursos.map((curso, index) => {
+                                                                    return <span key={index} className='text-sm ml-1'>{curso} </span>
+                                                                })
+                                                            }</td>
                                                         </tr>
                                                     );
                                                 })}

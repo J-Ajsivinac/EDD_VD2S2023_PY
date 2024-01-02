@@ -8,3 +8,4 @@ export const getBooksRequest = async () => axios.get(`${API_URL}/obtener-tlibros
 export const acceptBookRequest = async (data) => axios.post(`${API_URL}/admin/aceptar-libro`,data)
 export const getCoursesRequest = async (data) => axios.post(`${API_URL}/estudiante/buscar-estudiante`,data)
 export const getBooksStudentsRequest = async (data) => axios.post(`${API_URL}/estudiante/buscar-libros`,data)
+export const getBooksAStudentsRequest = async (data) => axios.post(`${API_URL}/estudiante/buscar-libros-aprobados`,data)

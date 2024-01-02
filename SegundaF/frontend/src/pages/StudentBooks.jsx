@@ -1,7 +1,7 @@
 import { Navbar } from '../components/Navbar'
 import { ContainerMain } from '../components/ContainerMain'
 import CardBooks from '../components/CardBooks'
-import { getBooksStudentsRequest } from '../api/peticiones'
+import { getBooksAStudentsRequest } from '../api/peticiones'
 import { useEffect, useState } from 'react'
 
 function StudentBooks() {
@@ -18,19 +18,22 @@ function StudentBooks() {
         }
         console.log(data)
         try {
-            const res = await getBooksStudentsRequest(data)
-            console.log(res.data)
+            const res = await getBooksAStudentsRequest(data)
+            console.log("¿¿¿¿", res.data)
             // setData(res.data)
             setLibrosU((prevLibrosU) => {
                 const nuevoLibrosU = { ...prevLibrosU };
                 res.data.libros.forEach((estudiante) => {
-                    if (estudiante.Carnet in nuevoLibrosU) {
+                    if (estudiante.Carnet in nuevoLibrosU && estudiante.Libros != null) {
                         nuevoLibrosU[estudiante.Curso].push(estudiante.Libros);
                     } else {
-                        nuevoLibrosU[estudiante.Curso] = [estudiante.Libros];
+                        if (estudiante.Libros != null) {
+                            nuevoLibrosU[estudiante.Curso] = [estudiante.Libros];
+
+                        }
                     }
                 });
-                console.log("----", nuevoLibrosU[775]);
+                console.log("----", nuevoLibrosU);
                 return nuevoLibrosU;
             });
         } catch (error) {

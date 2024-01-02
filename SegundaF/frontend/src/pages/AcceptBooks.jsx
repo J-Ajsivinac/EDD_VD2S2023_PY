@@ -48,6 +48,9 @@ function AcceptBooks() {
             estado: 'Aceptado'
         }
         try {
+            if (selectedBook === '') {
+                return
+            }
             const res = await acceptBookRequest(data)
             console.log(res)
             setSelectedBook(null)
@@ -64,6 +67,9 @@ function AcceptBooks() {
             estado: 'Rechazado'
         }
         try {
+            if (selectedBook === '') {
+                return
+            }
             const res = await acceptBookRequest(data)
             console.log(res)
             setSelectedBook(null)

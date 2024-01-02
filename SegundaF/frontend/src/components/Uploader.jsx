@@ -84,7 +84,7 @@ function Uploader({ height, onUpload, extension, iscontent = false }) {
                     </section>
                 </div>
                 <div className="w-full flex justify-end mt-4">
-                    <button type="submit">Subir</button>
+                    <button className="px-10  bg-btn-primary hover:bg-btn-primary-hover text-white py-2 rounded-md font-semibold" type="submit">Subir</button>
                 </div>
             </form>
         </div>

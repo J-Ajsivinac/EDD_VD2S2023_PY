@@ -5,12 +5,13 @@ import { LuUser2 } from "react-icons/lu";
 import { addPubsRequest } from '../api/peticiones';
 
 function CreatePub() {
-    const { register, handleSubmit, formState: { errors } } = useForm()
+    const { register, handleSubmit, formState: { errors }, reset } = useForm()
 
     const agregarPubs = async (data) => {
         try {
             const res = await addPubsRequest(data)
             console.log(res)
+            reset()
         } catch (error) {
             console.log(error)
         }
@@ -32,12 +33,12 @@ function CreatePub() {
                             <div className='p-3 bg-sub-dark rounded-full'>
                                 <LuUser2 size={25} />
                             </div>
-                            <textarea className=' pt-2 px-2 resize-none w-full bg-sub-dark rounded-md h-36 text-white outline-none' placeholder='Comentario'
+                            <textarea className=' pt-2 px-2 resize-none w-full bg-sub-dark rounded-md h-36 text-white outline-none' placeholder='Escriba su Publicación'
                                 {...register("contenido", { required: true })} />
                         </div>
                         {errors.contenido && (<p className='text-red-400 px-12 my-2'>Contenido del comentario requerido</p>)}
                         <div className='w-full flex justify-end'>
-                            <button type='submit' className='px-8  bg-blue-800 hover:bg-blue-900 text-white py-2 rounded-md '>Publicar</button>
+                            <button type='submit' className='px-8  bg-btn-primary hover:bg-btn-primary-hover text-white py-2 rounded-md '>Publicar</button>
                         </div>
                     </form>
                 </div>
