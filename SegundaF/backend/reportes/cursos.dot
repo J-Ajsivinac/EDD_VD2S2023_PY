@@ -34,6 +34,8 @@ nodo0777 -> nodo0781[len=1.00];
 
 }o0777 -> nodo0781[len=1.00]; 
 
+}o0777 -> nodo0781[len=1.00]; 
+
 }YS -> nodo0960[len=1.00]; 
 nodo0770 -> nodo0771[len=1.00]; 
 nodo0770 -> nodo0796[len=1.00]; 

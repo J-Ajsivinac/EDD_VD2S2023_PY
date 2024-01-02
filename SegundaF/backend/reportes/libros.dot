@@ -1,14 +1,30 @@
-digraph arbol { node [shape=box];"48b7ee9148494fc20f7c" [dir=back];
-"48b7ee9148494fc20f7c" -> "144e0a2e190913f3ebe9" [dir=back];
-"144e0a2e190913f3ebe9" -> "01-01-2024::12:05:40
+digraph arbol { node [shape=box];"c79b2b9f37b17fa69f12" [dir=back];
+"c79b2b9f37b17fa69f12" -> "b8926d1e99fb81b68ade" [dir=back];
+"b8926d1e99fb81b68ade" -> "01-01-2024::23:43:01
 0
 nulo
 0" [dir=back];
- "48b7ee9148494fc20f7c" -> "34e21230c2ac49d26b26" [dir=back];
-"34e21230c2ac49d26b26" -> "01-01-2024::12:05:40
+ "c79b2b9f37b17fa69f12" -> "745f8caf22c867f36b34" [dir=back];
+"745f8caf22c867f36b34" -> "01-01-2024::23:43:01
 1
 nulo
 0" [dir=back];
- {rank=same"144e0a2e190913f3ebe9" -> "34e21230c2ac49d26b26" [style=invis]}; 
-}invis]}; 
+ {rank=same"b8926d1e99fb81b68ade" -> "745f8caf22c867f36b34" [style=invis]}; 
+}ado
+sesion 29 -- 17 de abril
+202000033" [dir=back];
+ {rank=same"d43f0afeba9bd041fc93" -> "0521a48722bda139825c" [style=invis]}; 
+"0571d2742083427dc05b" -> "f3c7266503893e615207" [dir=back];
+"f3c7266503893e615207" -> "b199d7653cd7b89fa9b8" [dir=back];
+"b199d7653cd7b89fa9b8" -> "01-01-2024::21:58:49
+Aceptado
+sesion 28 -- 12 de abril
+202100014" [dir=back];
+ "f3c7266503893e615207" -> "a1a0911dd1d34d5fab65" [dir=back];
+"a1a0911dd1d34d5fab65" -> "01-01-2024::21:58:50
+Aceptado
+sesion 27 -- 10 de abril
+202100014" [dir=back];
+ {rank=same"b199d7653cd7b89fa9b8" -> "a1a0911dd1d34d5fab65" [style=invis]}; 
+{rank=same"f179c832c5b7b5c55ec4" -> "f3c7266503893e615207" [style=invis]}; 
 }

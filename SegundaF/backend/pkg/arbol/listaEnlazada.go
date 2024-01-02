@@ -35,14 +35,18 @@ func (l *ListaSimple) ConverirUsuarios() []Usuario {
 	return usuarios
 }
 
-func (l *ListaSimple) ConverirLibros() []Libro {
-	var libros []Libro
+func (l *ListaSimple) ConverirLibros() []Usuario {
+	var usuarios []Usuario
 	aux := l.Inicio
 	for aux != nil {
+		user := &Usuario{Nombre: aux.Tutor.Usuario.Nombre, Carnet: aux.Tutor.Usuario.Carnet, Password: aux.Tutor.Usuario.Password, Curso: aux.Tutor.Usuario.Curso}
 		for _, libro := range aux.Tutor.Usuario.Libros {
-			libros = append(libros, *libro)
+			if libro.Estado == "Aceptado" {
+				user.Libros = append(user.Libros, libro)
+			}
 		}
+		usuarios = append(usuarios, *user)
 		aux = aux.Siguiente
 	}
-	return libros
+	return usuarios
 }

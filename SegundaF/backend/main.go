@@ -285,6 +285,7 @@ func aceptarLibroAdmin(c *fiber.Ctx) error {
 		})
 	}
 	arbolB.CambiarEstadoLibro(arbolB.Raiz.Primero, nuevo.Carnet, nuevo.Nombre, nuevo.Estado)
+	arbolMerkle.AgregarBloque(nuevo.Estado, nuevo.Nombre, nuevo.Carnet)
 	return c.JSON(fiber.Map{
 		"message": "Libro" + nuevo.Estado + " exitosamente",
 	})
@@ -399,6 +400,36 @@ func buscarLibrosCurso(c *fiber.Ctx) error {
 	})
 }
 
+func buscarLibrosAprobados(c *fiber.Ctx) error {
+	type buscar struct {
+		Codigo []string `json:"codigo"`
+	}
+	listaSimple = &arbol.ListaSimple{Inicio: nil, Longitud: 0}
+	var nuevo buscar
+	err := c.BodyParser(&nuevo)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "Bad Request",
+		})
+	}
+
+	for i := 0; i < len(nuevo.Codigo); i++ {
+		arbolB.LlamarBuscarLibros(nuevo.Codigo[i], listaSimple)
+	}
+
+	libros := listaSimple.ConverirLibros()
+
+	if listaSimple.Longitud == 0 {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "No se encontro el tutor",
+		})
+	}
+	return c.JSON(fiber.Map{
+		"message": "Libros obtenidos exitosamente",
+		"libros":  libros,
+	})
+}
+
 func buscarEstudiante(c *fiber.Ctx) error {
 	type buscar struct {
 		Carnet int `json:"carnet"`
@@ -451,5 +482,6 @@ func main() {
 	estudiante := app.Group("/estudiante")
 	estudiante.Post("/buscar-libros", buscarLibrosCurso)
 	estudiante.Post("/buscar-estudiante", buscarEstudiante)
+	estudiante.Post("/buscar-libros-aprobados", buscarLibrosAprobados)
 	app.Listen(":3000")
 }

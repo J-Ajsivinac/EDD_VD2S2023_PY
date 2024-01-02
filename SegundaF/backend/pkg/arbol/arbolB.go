@@ -118,7 +118,9 @@ func (a *ArbolB) Graficar() string {
 	nombre_archivo := "./reportes/tutores.dot"
 	nombre_imagen := "./reportes/tutores.jpg"
 	if a.Raiz != nil {
-		cadena += "digraph arbol { \nnode[shape=record]\n"
+		cadena += "digraph arbol { \nnode[shape=record, color=white, fontcolor=white ];\n"
+		cadena += "edge[color=white];\n"
+		cadena += "bgcolor=\"#1e1f23\";\n"
 		cadena += a.grafo(a.Raiz.Primero)
 		cadena += a.conexionRamas(a.Raiz.Primero)
 		cadena += "}"
@@ -127,7 +129,7 @@ func (a *ArbolB) Graficar() string {
 	pkg.EscribirArchivo(cadena, nombre_archivo)
 	pkg.Ejecutar(nombre_imagen, nombre_archivo)
 
-	return "/reportes/tutores.jpg"
+	return nombre_imagen
 
 }
 
@@ -289,8 +291,8 @@ func (a *ArbolB) GuardarLibro(raiz *NodoB, nombre string, contenido string, carn
 				a.GuardarLibro(aux.Izquierdo.Primero, nombre, contenido, carnet)
 			}
 			if aux.Usuario != nil && aux.Usuario.Carnet == carnet {
-				raiz.Usuario.Libros = append(raiz.Usuario.Libros, &Libro{Nombre: nombre, Contenido: contenido, Estado: "Pendiente"})
-				// fmt.Println("Registre el libro")
+				fmt.Println("Registre el libro", carnet, nombre)
+				aux.Usuario.Libros = append(aux.Usuario.Libros, &Libro{Nombre: nombre, Contenido: contenido, Estado: "Pendiente"})
 				return
 			}
 			if aux.Siguiente == nil {
@@ -370,7 +372,7 @@ func (a *ArbolB) GuardarPublicacion(raiz *NodoB, contenido string, carnet int) {
 				a.GuardarPublicacion(aux.Izquierdo.Primero, contenido, carnet)
 			}
 			if aux.Usuario.Carnet == carnet {
-				raiz.Usuario.Publicaciones = append(raiz.Usuario.Publicaciones, contenido)
+				aux.Usuario.Publicaciones = append(aux.Usuario.Publicaciones, contenido)
 				// fmt.Println("Registre el libro")
 				return
 			}
