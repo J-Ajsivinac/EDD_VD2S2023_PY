@@ -18,6 +18,7 @@ function Report() {
     }
 
     useEffect(() => {
+        setImagen("")
         const gReport = async () => {
             const peticion = {
                 grafica: graph
@@ -26,8 +27,6 @@ function Report() {
             try {
                 const res = await graphRequest(peticion)
                 console.log(res)
-                // setImagen(res.data.data)
-                // const url = URL.createObjectURL(res.data.graph)
                 setImagen("http://localhost:3000/" + res.data.graph)
             } catch (error) {
                 console.log(error)
@@ -49,10 +48,8 @@ function Report() {
                                 <span className='font-medium'>Tipo</span>
                                 <span className='px-4 bg-alt-dark py-2 rounded-lg'>{titulo}</span>
                             </div>
-
                         </div>
                         <img src={imagen} alt="Reporte de Alumnos" />
-                        <button className='text-white'>Descargar</button>
                     </div>
                 </div>
             </ContainerMain>

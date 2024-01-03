@@ -1,8 +1,9 @@
 import { Navbar } from '../components/Navbar'
 import { ContainerMain } from '../components/ContainerMain'
 import { SelectInput } from '../components/SelectInput'
-import { acceptBookRequest, getBooksRequest } from '../api/peticiones'
+import { acceptBookRequest, getBooksRequest, finishRequest } from '../api/peticiones'
 import { useEffect, useState } from 'react';
+import { Toaster, toast } from 'sonner';
 
 function AcceptBooks() {
     const [selectedBook, setSelectedBook] = useState('')
@@ -15,7 +16,6 @@ function AcceptBooks() {
     const obtenerLibros = async () => {
         try {
             const res = await getBooksRequest()
-            console.log(res.data)
             // setData(res.data)
             res.data.data.forEach(estudiante => {
                 estudiante.Libros.forEach(libro => {
@@ -79,6 +79,16 @@ function AcceptBooks() {
         }
     }
 
+    const createTree = async () => {
+        try {
+            const res = await finishRequest()
+            console.log(res)
+            toast.success(res.data.message, { duration: 2000 })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <div className='flex h-screen bg-bg-dark'>
             <Navbar />
@@ -95,11 +105,12 @@ function AcceptBooks() {
                                 <button onClick={acceptBook} className='flex-1 bg-btn-green hover:bg-btn-green-hover h-10 rounded-md font-semibold transition-transform hover:transition-all ease-in-out duration-150'>Aceptar</button>
                                 <button onClick={rejectBooks} className='flex-1 bg-btn-red hover:bg-btn-red-hover h-10 rounded-md font-semibold transition-transform hover:transition-all ease-in-out duration-150'>Rechazar</button>
                             </div>
-                            <button type="" className='bg-btn-primary hover:bg-btn-primary-hover px-8 py-2 rounded font-semibold transition-transform hover:transition-all ease-in-out duration-150'>Finalizar</button>
+                            <button onClick={createTree} className='bg-btn-primary hover:bg-btn-primary-hover px-8 py-2 rounded font-semibold transition-transform hover:transition-all ease-in-out duration-150'>Finalizar</button>
                         </div>
                     </div>
                 </div>
             </ContainerMain>
+            <Toaster position="top-center" richColors theme="dark" />
         </div>
     )
 }

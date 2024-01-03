@@ -3,6 +3,7 @@ import { ContainerMain } from '../components/ContainerMain'
 import { useForm } from 'react-hook-form'
 import { LuUser2 } from "react-icons/lu";
 import { addPubsRequest } from '../api/peticiones';
+import { Toaster, toast } from 'sonner';
 
 function CreatePub() {
     const { register, handleSubmit, formState: { errors }, reset } = useForm()
@@ -11,6 +12,7 @@ function CreatePub() {
         try {
             const res = await addPubsRequest(data)
             console.log(res)
+            toast.success(res.data.message, { duration: 2000 })
             reset()
         } catch (error) {
             console.log(error)
@@ -43,6 +45,7 @@ function CreatePub() {
                     </form>
                 </div>
             </ContainerMain>
+            <Toaster position="top-center" richColors theme="dark" />
         </div>
     )
 }
