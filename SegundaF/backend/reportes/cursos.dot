@@ -1,8 +1,10 @@
 digraph grafoDirigido{ 
  rankdir=LR; 
- node [shape=box]; layout=neato; 
+ node [shape=box, color=white, fontcolor=white]; layout=neato; 
  nodoECYS[label="ECYS"]; 
 node [shape = ellipse]; 
+bgcolor="#1e1f23";
+edge[color=white];
 nodo0770[label="0770" ]; 
 nodo0771[label="0771" ]; 
 nodo0796[label="0796" ]; 
@@ -31,8 +33,6 @@ nodo0771 -> nodo0777[len=1.00];
 nodo0772 -> nodo0722[len=1.00]; 
 nodo0772 -> nodo0781[len=1.00]; 
 nodo0777 -> nodo0781[len=1.00]; 
-
-}o0777 -> nodo0781[len=1.00]; 
 
 }o0777 -> nodo0781[len=1.00]; 
 

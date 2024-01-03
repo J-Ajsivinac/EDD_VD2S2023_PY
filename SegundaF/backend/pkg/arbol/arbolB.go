@@ -94,7 +94,6 @@ func (a *ArbolB) dividir(rama *RamaB) *NodoB {
 func (a *ArbolB) Insertar(carnet int, nombre string, curso string, password string) { //15
 	contrasenaE := encriptarPassword(password)
 	tutor := &Usuario{Carnet: carnet, Nombre: nombre, Curso: curso, Password: contrasenaE}
-	fmt.Println(carnet, nombre, curso, password)
 	nuevoNodo := &NodoB{Usuario: tutor}
 	if a.Raiz == nil {
 		a.Raiz = &RamaB{Primero: nil, Hoja: true, Contador: 0}
@@ -210,8 +209,7 @@ func (a *ArbolB) Buscar(numero int, listaSimple *ListaSimple) {
 	}
 	a.buscarArbol(a.Raiz.Primero, numero, listaSimple)
 	if listaSimple.Longitud > 0 {
-		// fmt.Println("Se encontro el elemento", listaSimple.Longitud)
-		fmt.Println(numero, listaSimple.Inicio.Tutor.Usuario.Carnet, listaSimple.Inicio.Tutor.Usuario.Password)
+		fmt.Println("Se encontro el elemento", listaSimple.Longitud)
 	} else {
 		fmt.Println("No se encontro")
 	}
@@ -225,7 +223,6 @@ func (a *ArbolB) buscarArbol(raiz *NodoB, numero int, listaSimple *ListaSimple) 
 				a.buscarArbol(aux.Izquierdo.Primero, numero, listaSimple)
 			}
 			if aux.Usuario != nil && aux.Usuario.Carnet == numero {
-				fmt.Println(aux.Usuario, "----")
 				listaSimple.Insertar(aux)
 			}
 			if aux.Siguiente == nil {
@@ -347,7 +344,6 @@ func (a *ArbolB) BuscarLibrosC(raiz *NodoB, codigo string, listaSimple *ListaSim
 	if raiz != nil {
 		aux := raiz
 		for aux != nil {
-
 			if aux.Izquierdo != nil {
 				a.BuscarLibrosC(aux.Izquierdo.Primero, codigo, listaSimple)
 			}
@@ -373,7 +369,6 @@ func (a *ArbolB) GuardarPublicacion(raiz *NodoB, contenido string, carnet int) {
 			}
 			if aux.Usuario.Carnet == carnet {
 				aux.Usuario.Publicaciones = append(aux.Usuario.Publicaciones, contenido)
-				// fmt.Println("Registre el libro")
 				return
 			}
 			if aux.Siguiente == nil {

@@ -8,7 +8,6 @@ import (
 	"backend/schemas"
 	"crypto/sha256"
 	"encoding/hex"
-	"fmt"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -41,7 +40,6 @@ func Login(c *fiber.Ctx) error {
 	carnet, _ := strconv.Atoi(login.Carnet)
 	if !login.Estutor {
 		user, resp := tablaHash.BuscarUsuario(carnet)
-		fmt.Println(user, resp)
 		if resp && user.Password == encriptarPassword(login.Contrasena) {
 			return c.JSON(fiber.Map{
 				"message": "Login success",
@@ -65,8 +63,6 @@ func Login(c *fiber.Ctx) error {
 					"mode":    "tutor",
 				})
 			} else {
-				fmt.Println(listaSimple.Inicio.Tutor.Usuario.Password, "encontrador")
-				fmt.Println(encriptarPassword(login.Contrasena), "encriptado")
 				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 					"message": "Credenciales Incorectas",
 				})
@@ -209,7 +205,6 @@ func GenerarGraficas(c *fiber.Ctx) error {
 			"graph":   img,
 		})
 	} else if grafica.Grafica == "Merkle" {
-		arbolMerkle.GenerarArbol()
 		img := arbolMerkle.Graficar()
 		if len(img) == 0 {
 			return c.Status(400).JSON(fiber.Map{
@@ -236,6 +231,13 @@ func GenerarGraficas(c *fiber.Ctx) error {
 			"message": "No se encontro la grafica",
 		})
 	}
+}
+
+func crearArbol(c *fiber.Ctx) error {
+	arbolMerkle.GenerarArbol()
+	return c.JSON(fiber.Map{
+		"message": "Arbol creado exitosamente",
+	})
 }
 
 func AgregarL(c *fiber.Ctx) error {
@@ -284,6 +286,12 @@ func aceptarLibroAdmin(c *fiber.Ctx) error {
 			"message": "Bad Request",
 		})
 	}
+	if arbolB.Raiz == nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "No hay libros registrados",
+		})
+	}
+
 	arbolB.CambiarEstadoLibro(arbolB.Raiz.Primero, nuevo.Carnet, nuevo.Nombre, nuevo.Estado)
 	arbolMerkle.AgregarBloque(nuevo.Estado, nuevo.Nombre, nuevo.Carnet)
 	return c.JSON(fiber.Map{
@@ -332,6 +340,11 @@ func obtenerPublicaciones(c *fiber.Ctx) error {
 
 func obtenerTLibros(c *fiber.Ctx) error {
 	listaSimple = &arbol.ListaSimple{Inicio: nil, Longitud: 0}
+	if arbolB.Raiz == nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "No hay libros registrados",
+		})
+	}
 	arbolB.ObtenerLibros(arbolB.Raiz.Primero, listaSimple)
 	if listaSimple.Longitud == 0 {
 		return c.Status(400).JSON(fiber.Map{
@@ -471,6 +484,8 @@ func main() {
 	admin.Post("/aceptar-arbolM", AceptarL)
 	admin.Post("/graficar", GenerarGraficas)
 	admin.Post("/aceptar-libro", aceptarLibroAdmin)
+	admin.Post("/crear-arbol", crearArbol)
+
 	//Tutor
 	tutor := app.Group("/tutor")
 	tutor.Post("/agregar-arbolB", AgregarL)

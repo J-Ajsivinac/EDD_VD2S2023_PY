@@ -103,7 +103,9 @@ func (a *ArbolMerkle) Graficar() string {
 	nombre_archivo := "./reportes/libros.dot"
 	nombre_imagen := "./reportes/libros.jpg"
 	if a.RaizMerkle != nil {
-		cadena += "digraph arbol { node [shape=box];"
+		cadena += "digraph arbol { node [shape=box, color=white, fontcolor=white];"
+		cadena += "edge[color=white];\n"
+		cadena += "bgcolor=\"#1e1f23\";\n"
 		cadena += a.retornarValoresArbol(a.RaizMerkle, 0)
 		cadena += "}"
 	}

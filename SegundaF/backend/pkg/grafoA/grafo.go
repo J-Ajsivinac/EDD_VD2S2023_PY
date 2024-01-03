@@ -83,8 +83,10 @@ func (g *Grafo) Graficar() string {
 	nombre_archivo := "./reportes/cursos.dot"
 	nombre_imagen := "./reportes/cursos.jpg"
 	if g.Principal != nil {
-		cadena += "digraph grafoDirigido{ \n rankdir=LR; \n node [shape=box]; layout=neato; \n nodo" + g.Principal.Valor + "[label=\"" + g.Principal.Valor + "\"]; \n"
+		cadena += "digraph grafoDirigido{ \n rankdir=LR; \n node [shape=box, color=white, fontcolor=white]; layout=neato; \n nodo" + g.Principal.Valor + "[label=\"" + g.Principal.Valor + "\"]; \n"
 		cadena += "node [shape = ellipse]; \n"
+		cadena += "bgcolor=\"#1e1f23\";\n"
+		cadena += "edge[color=white];\n"
 		cadena += g.retornarValoresMatriz()
 		cadena += "\n}"
 	}

@@ -1,30 +1,57 @@
-digraph arbol { node [shape=box];"c79b2b9f37b17fa69f12" [dir=back];
-"c79b2b9f37b17fa69f12" -> "b8926d1e99fb81b68ade" [dir=back];
-"b8926d1e99fb81b68ade" -> "01-01-2024::23:43:01
-0
-nulo
-0" [dir=back];
- "c79b2b9f37b17fa69f12" -> "745f8caf22c867f36b34" [dir=back];
-"745f8caf22c867f36b34" -> "01-01-2024::23:43:01
-1
-nulo
-0" [dir=back];
- {rank=same"b8926d1e99fb81b68ade" -> "745f8caf22c867f36b34" [style=invis]}; 
-}ado
-sesion 29 -- 17 de abril
+digraph arbol { node [shape=box, color=white, fontcolor=white];edge[color=white];
+bgcolor="#1e1f23";
+"94df96a743fa0d9b3ec8" [dir=back];
+"94df96a743fa0d9b3ec8" -> "6d463190ff151204c4b6" [dir=back];
+"6d463190ff151204c4b6" -> "faddbfbeeda8630fa81d" [dir=back];
+"faddbfbeeda8630fa81d" -> "9c66fc1180759a43a6d0" [dir=back];
+"9c66fc1180759a43a6d0" -> "02-01-2024::23:13:05
+Aceptado
+edd-A-5.1 - Camino más corto
+202000034" [dir=back];
+ "faddbfbeeda8630fa81d" -> "28b8d137462cbb287304" [dir=back];
+"28b8d137462cbb287304" -> "02-01-2024::23:13:07
+Rechazado
+edd-I-F-Investigación
 202000033" [dir=back];
- {rank=same"d43f0afeba9bd041fc93" -> "0521a48722bda139825c" [style=invis]}; 
-"0571d2742083427dc05b" -> "f3c7266503893e615207" [dir=back];
-"f3c7266503893e615207" -> "b199d7653cd7b89fa9b8" [dir=back];
-"b199d7653cd7b89fa9b8" -> "01-01-2024::21:58:49
+ {rank=same"9c66fc1180759a43a6d0" -> "28b8d137462cbb287304" [style=invis]}; 
+"6d463190ff151204c4b6" -> "a15f50a1ce861bf000b1" [dir=back];
+"a15f50a1ce861bf000b1" -> "c2bdbc69bbb162e42410" [dir=back];
+"c2bdbc69bbb162e42410" -> "02-01-2024::23:13:09
 Aceptado
-sesion 28 -- 12 de abril
+edd-A-6.1 - Criptógrafo
+202000033" [dir=back];
+ "a15f50a1ce861bf000b1" -> "33883e21c90382dd3748" [dir=back];
+"33883e21c90382dd3748" -> "02-01-2024::23:13:26
+3
+nulo
+0" [dir=back];
+ {rank=same"c2bdbc69bbb162e42410" -> "33883e21c90382dd3748" [style=invis]}; 
+{rank=same"faddbfbeeda8630fa81d" -> "a15f50a1ce861bf000b1" [style=invis]}; 
+"94df96a743fa0d9b3ec8" -> "d27e7d1691892b484344" [dir=back];
+"d27e7d1691892b484344" -> "42241f19e4ee5d9d4c31" [dir=back];
+"42241f19e4ee5d9d4c31" -> "2c94ec41853b852b9260" [dir=back];
+"2c94ec41853b852b9260" -> "02-01-2024::23:19:04
+Rechazado
+edd-A-3.3-Árbol de expresiones
 202100014" [dir=back];
- "f3c7266503893e615207" -> "a1a0911dd1d34d5fab65" [dir=back];
-"a1a0911dd1d34d5fab65" -> "01-01-2024::21:58:50
-Aceptado
-sesion 27 -- 10 de abril
-202100014" [dir=back];
- {rank=same"b199d7653cd7b89fa9b8" -> "a1a0911dd1d34d5fab65" [style=invis]}; 
-{rank=same"f179c832c5b7b5c55ec4" -> "f3c7266503893e615207" [style=invis]}; 
+ "42241f19e4ee5d9d4c31" -> "426a4657e0a4e273fc7b" [dir=back];
+"426a4657e0a4e273fc7b" -> "02-01-2024::23:19:05
+5
+nulo
+0" [dir=back];
+ {rank=same"2c94ec41853b852b9260" -> "426a4657e0a4e273fc7b" [style=invis]}; 
+"d27e7d1691892b484344" -> "725393adbe339519d150" [dir=back];
+"725393adbe339519d150" -> "e8bedd98247952085924" [dir=back];
+"e8bedd98247952085924" -> "02-01-2024::23:19:05
+6
+nulo
+0" [dir=back];
+ "725393adbe339519d150" -> "379e36e80ff295436e2c" [dir=back];
+"379e36e80ff295436e2c" -> "02-01-2024::23:19:05
+7
+nulo
+0" [dir=back];
+ {rank=same"e8bedd98247952085924" -> "379e36e80ff295436e2c" [style=invis]}; 
+{rank=same"42241f19e4ee5d9d4c31" -> "725393adbe339519d150" [style=invis]}; 
+{rank=same"6d463190ff151204c4b6" -> "d27e7d1691892b484344" [style=invis]}; 
 }
