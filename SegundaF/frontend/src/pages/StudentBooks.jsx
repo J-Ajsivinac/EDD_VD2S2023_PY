@@ -46,12 +46,12 @@ function StudentBooks() {
             <ContainerMain>
                 <div className='flex w-full h-full mt-4 items-center gap-5 flex-col '>
                     <div className='flex items-start justify-center w-2/3 rounded-lg flex-col gap-4 text-white'>
-                        {/* <CardBooks code='123456' title='Introduccción....' />
-                        <CardBooks code='222' title='Introduccción....' /> */}
+
                         {
-                            Object.keys(librosU).map((Curso, i) => (
-                                <CardBooks code={Curso} data={librosU[Curso][0]} key={i} />
-                            ))
+                            Object.keys(librosU).length === 0 ? <h2 className='text-white font-bold text-center'>No hay Libros registrados</h2> :
+                                Object.keys(librosU).map((Curso, i) => (
+                                    <CardBooks code={Curso} data={librosU[Curso][0]} key={i} />
+                                ))
                         }
                     </div>
                 </div>

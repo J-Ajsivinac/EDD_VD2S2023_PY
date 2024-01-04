@@ -27,7 +27,7 @@ function Report() {
             try {
                 const res = await graphRequest(peticion)
                 console.log(res)
-                setImagen("http://localhost:3000/" + res.data.graph)
+                setImagen(res.data.graph)
             } catch (error) {
                 console.log(error)
                 setImagen("")
@@ -49,7 +49,7 @@ function Report() {
                                 <span className='px-4 bg-alt-dark py-2 rounded-lg'>{titulo}</span>
                             </div>
                         </div>
-                        <img src={imagen} alt="Reporte de Alumnos" />
+                        <img src={imagen} alt="Reporte" />
                     </div>
                 </div>
             </ContainerMain>
