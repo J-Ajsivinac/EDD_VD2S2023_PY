@@ -7,7 +7,9 @@ import (
 	"backend/pkg/tabla"
 	"backend/schemas"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/hex"
+	"os"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -29,7 +31,7 @@ func Login(c *fiber.Ctx) error {
 			"error": "Bad Request",
 		})
 	}
-	if login.Carnet == "admin" && login.Contrasena == "admin" {
+	if login.Carnet == "ADMIN_202200135" && login.Contrasena == "admin" {
 		return c.JSON(fiber.Map{
 			"message": "Login success",
 			"carnet":  "ADMIN_202200135",
@@ -194,37 +196,44 @@ func GenerarGraficas(c *fiber.Ctx) error {
 		})
 	}
 	if grafica.Grafica == "ArbolB" {
-		img := arbolB.Graficar()
-		if len(img) == 0 {
+		arbolB.Graficar()
+		imagenBytes, err := os.ReadFile("reportes/tutores.jpg")
+
+		if err != nil {
 			return c.Status(400).JSON(fiber.Map{
 				"message": "No se pudo generar la grafica",
 			})
 		}
+		imagenbase := "data:image/jpg;base64," + base64.StdEncoding.EncodeToString(imagenBytes)
 		return c.JSON(fiber.Map{
 			"message": "Grafica Generada",
-			"graph":   img,
+			"graph":   imagenbase,
 		})
 	} else if grafica.Grafica == "Merkle" {
-		img := arbolMerkle.Graficar()
-		if len(img) == 0 {
+		arbolMerkle.Graficar()
+		imagenBytes, err := os.ReadFile("reportes/libros.jpg")
+		if err != nil {
 			return c.Status(400).JSON(fiber.Map{
-				"message": "No se pudo generar la grafica",
+				"message": "Se esperaba un JSON",
 			})
 		}
+		imagenbase := "data:image/jpg;base64," + base64.StdEncoding.EncodeToString(imagenBytes)
 		return c.JSON(fiber.Map{
 			"message": "Grafica Generada",
-			"graph":   img,
+			"graph":   imagenbase,
 		})
 	} else if grafica.Grafica == "Grafo" {
-		img := grafo.Graficar()
-		if len(img) == 0 {
+		grafo.Graficar()
+		imagenBytes, err := os.ReadFile("reportes/cursos.jpg")
+		if err != nil {
 			return c.Status(400).JSON(fiber.Map{
-				"message": "No se pudo generar la grafica",
+				"message": "Se esperaba un JSON",
 			})
 		}
+		imagenbase := "data:image/jpg;base64," + base64.StdEncoding.EncodeToString(imagenBytes)
 		return c.JSON(fiber.Map{
 			"message": "Grafica Generada",
-			"graph":   img,
+			"graph":   imagenbase,
 		})
 	} else {
 		return c.Status(400).JSON(fiber.Map{
@@ -471,7 +480,7 @@ func buscarEstudiante(c *fiber.Ctx) error {
 func main() {
 	app := fiber.New()
 	app.Use(cors.New())
-	app.Static("/reportes", "./reportes")
+	// app.Static("/reportes", "./reportes")
 	app.Post("/login", Login)
 	app.Get("/obtener-tlibros", obtenerTLibros)
 	app.Post("/validar-cursos", validarCurso)

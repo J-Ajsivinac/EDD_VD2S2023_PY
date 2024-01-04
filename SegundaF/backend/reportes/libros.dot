@@ -1,15 +1,18 @@
 digraph arbol { node [shape=box, color=white, fontcolor=white];edge[color=white];
 bgcolor="#1e1f23";
-"94df96a743fa0d9b3ec8" [dir=back];
-"94df96a743fa0d9b3ec8" -> "6d463190ff151204c4b6" [dir=back];
-"6d463190ff151204c4b6" -> "faddbfbeeda8630fa81d" [dir=back];
-"faddbfbeeda8630fa81d" -> "9c66fc1180759a43a6d0" [dir=back];
-"9c66fc1180759a43a6d0" -> "02-01-2024::23:13:05
+"21ba0a0df195e06318c9" [dir=back];
+"21ba0a0df195e06318c9" -> "62d644e44247e6302d6f" [dir=back];
+"62d644e44247e6302d6f" -> "03-01-2024::16:54:59
 Aceptado
-edd-A-5.1 - Camino más corto
-202000034" [dir=back];
- "faddbfbeeda8630fa81d" -> "28b8d137462cbb287304" [dir=back];
-"28b8d137462cbb287304" -> "02-01-2024::23:13:07
+[EDD]HC_Fase1
+202000869" [dir=back];
+ "21ba0a0df195e06318c9" -> "211a73d100f437096996" [dir=back];
+"211a73d100f437096996" -> "03-01-2024::16:55:00
+Rechazado
+Pasos Calificacion Fase 2
+202000869" [dir=back];
+ {rank=same"62d644e44247e6302d6f" -> "211a73d100f437096996" [style=invis]}; 
+}4::23:13:07
 Rechazado
 edd-I-F-Investigación
 202000033" [dir=back];
