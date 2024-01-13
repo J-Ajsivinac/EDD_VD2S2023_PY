@@ -19,7 +19,6 @@ function StudentBooks() {
         console.log(data)
         try {
             const res = await getBooksAStudentsRequest(data)
-            console.log("¿¿¿¿", res.data)
             // setData(res.data)
             setLibrosU((prevLibrosU) => {
                 const nuevoLibrosU = { ...prevLibrosU };

@@ -1,0 +1,34 @@
+{
+    "Cursos":[
+        {
+            "Codigo": "ECYS",
+            "Nombre":"Principal",
+            "Post": ["0770"]
+        },
+        {
+            "Codigo": "0770",
+            "Nombre":"Introduccion a la programacion y computacion 1",
+            "Post": ["0771", "0796", "0962"]
+        },
+        {
+            "Codigo": "0771",
+            "Nombre":"Introduccion a la programacion y computacion 2",
+            "Post": ["0772", "0964", "0777"]
+        },
+        {
+            "Codigo": "0772",
+            "Nombre":"Estructura de datos",
+            "Post": ["0722", "0781"]
+        },
+        {
+            "Codigo": "0777",
+            "Nombre":"Organizacion de Lenguajes y Compiladores",
+            "Post": ["0781"]
+        },
+        {
+            "Codigo": "0960",
+            "Nombre":"Matematica para computacion 1",
+            "Post": []
+        }
+    ]
+}

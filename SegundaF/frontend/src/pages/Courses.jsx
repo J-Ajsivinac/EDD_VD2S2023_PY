@@ -5,6 +5,7 @@ import { getCoursesRequest } from '../api/peticiones'
 import { useEffect, useState } from 'react'
 function Courses() {
     const [courses, setCourses] = useState([])
+    // const [nameCourses, setNameCourses] = useState([])
     const obtenerCursos = async () => {
         const data = {
             carnet: parseInt(localStorage.getItem('carnet')),
@@ -12,7 +13,8 @@ function Courses() {
         try {
             const res = await getCoursesRequest(data)
             setCourses(res.data.cursos)
-            console.log(res.data.cursos)
+            console.log("---", res.data.cursos)
+            // setNameCourses(res.data.nombre)
             localStorage.setItem('cursos', res.data.cursos)
         } catch (error) {
             console.log(error)

@@ -55,6 +55,9 @@ go run main.go
 
 Luego se imprimiran el menu de opciones
 
+> [!NOTE]  
+> Existen archivos de prueba en la carpeta llamada test, inputE hace referencia al archivo de estudiantes, e inputT hace referencia al archivo de tutores
+
 ## 💻 Interfaz de Usuario y Funcionalidades
 Al ejecutar la aplicación se desplegará el siguiente login para iniciar sesión:
 

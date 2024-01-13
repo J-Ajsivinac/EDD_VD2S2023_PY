@@ -68,6 +68,9 @@ Para poder abrir la web dirijase a: http://localhost:5173/
 
 Luego ya podrá realizar las acciones que se mostrarán a continuación
 
+> [!NOTE]  
+> Existen archivos de prueba en la carpeta llamada test
+
 ## 💻 Interfaz de Usuario y Funcionalidades
 Al abrir la ruta anterior se mostrará el Login:
 

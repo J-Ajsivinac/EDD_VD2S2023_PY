@@ -13,23 +13,24 @@ type Grafo struct {
 type Cursos struct {
 	Codigo        string   `json:"Codigo"`
 	PostRequisito []string `json:"Post"`
+	Nombre        string   `json:"nombre"`
 }
 
 type DatosCurso struct {
 	Curso []Cursos `json:"Cursos"`
 }
 
-func (g *Grafo) insertarColumna(curso string, post string) {
-	nuevoNodo := &NodoListaAdyacencia{Valor: post}
+func (g *Grafo) insertarColumna(curso string, post string, nombre string) {
+	nuevoNodo := &NodoListaAdyacencia{Valor: post, Nombre: nombre}
 	if g.Principal != nil && curso == g.Principal.Valor {
-		g.insertarFila(post)
+		g.insertarFila(post, nombre)
 		aux := g.Principal
 		for aux.Siguiente != nil {
 			aux = aux.Siguiente
 		}
 		aux.Siguiente = nuevoNodo
 	} else {
-		g.insertarFila(curso)
+		g.insertarFila(curso, nombre)
 		aux := g.Principal
 		for aux != nil {
 			if aux.Valor == curso {
@@ -46,8 +47,8 @@ func (g *Grafo) insertarColumna(curso string, post string) {
 	}
 }
 
-func (g *Grafo) insertarFila(curso string) {
-	nuevoNodo := &NodoListaAdyacencia{Valor: curso}
+func (g *Grafo) insertarFila(curso string, nombre string) {
+	nuevoNodo := &NodoListaAdyacencia{Valor: curso, Nombre: nombre}
 	if g.Principal == nil {
 		g.Principal = nuevoNodo
 	} else {
@@ -62,14 +63,14 @@ func (g *Grafo) insertarFila(curso string) {
 	}
 }
 
-func (g *Grafo) InsertarValores(curso string, post string) {
+func (g *Grafo) InsertarValores(curso string, post string, nombre string) {
 	if g.Principal == nil {
 		//insertar Fila
-		g.insertarFila(curso)
+		g.insertarFila(curso, nombre)
 		//insertar Columna
-		g.insertarColumna(curso, post)
+		g.insertarColumna(curso, post, nombre)
 	} else {
-		g.insertarColumna(curso, post)
+		g.insertarColumna(curso, post, nombre)
 	}
 }
 
@@ -149,10 +150,10 @@ func (matriz1 *Grafo) Lectura(reader io.Reader) (bool, string) {
 	for _, curso := range datos.Curso {
 		if len(curso.PostRequisito) > 0 {
 			for j := 0; j < len(curso.PostRequisito); j++ {
-				matriz1.InsertarValores(curso.Codigo, curso.PostRequisito[j])
+				matriz1.InsertarValores(curso.Codigo, curso.PostRequisito[j], curso.Nombre)
 			}
 		} else {
-			matriz1.InsertarValores("ECYS", curso.Codigo)
+			matriz1.InsertarValores("ECYS", curso.Codigo, curso.Nombre)
 		}
 	}
 	return true, "Se ha cargado el archivo correctamente"
