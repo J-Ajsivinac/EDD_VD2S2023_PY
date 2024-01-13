@@ -14,7 +14,7 @@
 <div align="center"> 📆 Vacaciones Diciembre 2023</div>
 
 > [!IMPORTANT]  
-> La primera fase es una aplicación en consola que usa estructuras diferentes a la segunda fase, ya que la segunda fase es una web conformada de backend y frontend que usa otras estructuras.
+> El proyecto esta dividido en 2 fases
 
 > [!NOTE]  
 > La Primera fase usa las siguientes estructuras:
